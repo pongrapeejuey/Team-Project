@@ -15,8 +15,7 @@
         <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
             <h1 class="h3 m-0">Learning Portfolio</h1>
             <div class="d-flex gap-2">
-                <button id="btn-sample" type="button" class="btn btn-outline-primary btn-sm">โหลดข้อมูลตัวอย่าง
-                    (2×2)</button>
+                <button id="btn-sample" type="button" class="btn btn-outline-primary btn-sm">โหลดข้อมูลตัวอย่าง</button>
                 <button id="btn-clear" type="button" class="btn btn-outline-danger btn-sm">ล้างข้อมูลทั้งหมด</button>
             </div>
         </div>
@@ -57,97 +56,106 @@
                     </div>
                 </section>
 
-                <section id="portfolio-list-section">
-                    <h2>Portfolios <span id="portfolio-count" class="count">0</span></h2>
-                    <div id="portfolio-list"></div>
+                <div id="status" class="alert d-none" role="alert"></div>
+
+                <section id="portfolio-list-section" class="card box mb-4">
+                    <h2 class="card-header h5 m-0">Portfolios <span id="portfolio-count"
+                            class="badge text-bg-secondary">0</span></h2>
+                    <div class="card-body">
+                        <div id="portfolio-list" class="row g-3"></div>
+                    </div>
                 </section>
 
-                <section id="item-section">
-                    <h2>เพิ่ม Portfolio Item</h2>
-                    <form id="item-form" novalidate>
-                        <div class="field">
-                            <label for="portfolioId">เพิ่มใน Portfolio *</label>
-                            <select id="portfolioId" name="portfolioId"></select>
-                            <div class="field-error" id="error-portfolioId"></div>
-                        </div>
-                        <div class="field">
-                            <label for="title">Title *</label>
-                            <input id="title" name="title" type="text">
-                            <div class="field-error" id="error-title"></div>
-                        </div>
-                        <div class="field">
-                            <label for="type">Type *</label>
-                            <select id="type" name="type">
-                                <option value="">เลือกประเภท</option>
-                                <option>Course Assignment</option>
-                                <option>Personal Project</option>
-                                <option>Club Activity</option>
-                                <option>Workshop</option>
-                                <option>Volunteer</option>
-                                <option>Other</option>
-                            </select>
-                            <div class="field-error" id="error-type"></div>
-                        </div>
-                        <div class="field">
-                            <label for="date">Date *</label>
-                            <input id="date" name="date" type="date">
-                            <div class="field-error" id="error-date"></div>
-                        </div>
-                        <div class="field">
-                            <label for="role">Role *</label>
-                            <input id="role" name="role" type="text">
-                            <div class="field-error" id="error-role"></div>
-                        </div>
-                        <div class="field">
-                            <label for="skills">Skills * (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML, CSS)</label>
-                            <input id="skills" name="skills" type="text">
-                            <div class="field-error" id="error-skills"></div>
-                        </div>
-                        <div class="field">
-                            <label for="description">Description *</label>
-                            <textarea id="description" name="description" rows="3"></textarea>
-                            <div class="field-error" id="error-description"></div>
-                        </div>
-            </div>
+                <section id="item-section" class="card box mb-4">
+                    <h2 class="card-header h5 m-0">เพิ่ม Portfolio Item</h2>
+                    <div class="card-body">
+                        <form id="item-form" class="form-card" novalidate>
+                            <div class="mb-3">
+                                <label for="portfolioId" class="form-label">เพิ่มใน Portfolio *</label>
+                                <select id="portfolioId" name="portfolioId" class="form-select"></select>
+                                <div class="field-error" id="error-portfolioId"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="title" class="form-label">Title *</label>
+                                    <input id="title" name="title" type="text" class="form-control">
+                                    <div class="field-error" id="error-title"></div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="type" class="form-label">Type *</label>
+                                    <select id="type" name="type" class="form-select">
+                                        <option value="">เลือกประเภท</option>
+                                        <option>Course Assignment</option>
+                                        <option>Personal Project</option>
+                                        <option>Club Activity</option>
+                                        <option>Workshop</option>
+                                        <option>Volunteer</option>
+                                        <option>Other</option>
+                                    </select>
+                                    <div class="field-error" id="error-type"></div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="date" class="form-label">Date *</label>
+                                    <input id="date" name="date" type="date" class="form-control">
+                                    <div class="field-error" id="error-date"></div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role *</label>
+                                <input id="role" name="role" type="text" class="form-control">
+                                <div class="field-error" id="error-role"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="skills" class="form-label">Skills * (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML,
+                                    CSS)</label>
+                                <input id="skills" name="skills" type="text" class="form-control">
+                                <div class="field-error" id="error-skills"></div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description *</label>
+                                <textarea id="description" name="description" rows="3" class="form-control"></textarea>
+                                <div class="field-error" id="error-description"></div>
+                            </div>
 
-            <fieldset>
-                <legend>Reflection</legend>
-                <div class="field">
-                    <label for="whatIDid">What I did *</label>
-                    <textarea id="whatIDid" name="whatIDid" rows="2"></textarea>
-                    <div class="field-error" id="error-whatIDid"></div>
-                </div>
-                <div class="field">
-                    <label for="whatILearned">What I learned *</label>
-                    <textarea id="whatILearned" name="whatILearned" rows="2"></textarea>
-                    <div class="field-error" id="error-whatILearned"></div>
-                </div>
-                <div class="field">
-                    <label for="challenge">Challenge *</label>
-                    <textarea id="challenge" name="challenge" rows="2"></textarea>
-                    <div class="field-error" id="error-challenge"></div>
-                </div>
-                <div class="field">
-                    <label for="nextStep">Next step *</label>
-                    <textarea id="nextStep" name="nextStep" rows="2"></textarea>
-                    <div class="field-error" id="error-nextStep"></div>
-                </div>
-            </fieldset>
+                            <fieldset class="mb-3">
+                                <legend class="h6">Reflection</legend>
+                                <div class="mb-3">
+                                    <label for="whatIDid" class="form-label">What I did *</label>
+                                    <textarea id="whatIDid" name="whatIDid" rows="2" class="form-control"></textarea>
+                                    <div class="field-error" id="error-whatIDid"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="whatILearned" class="form-label">What I learned *</label>
+                                    <textarea id="whatILearned" name="whatILearned" rows="2"
+                                        class="form-control"></textarea>
+                                    <div class="field-error" id="error-whatILearned"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="challenge" class="form-label">Challenge *</label>
+                                    <textarea id="challenge" name="challenge" rows="2" class="form-control"></textarea>
+                                    <div class="field-error" id="error-challenge"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nextStep" class="form-label">Next step *</label>
+                                    <textarea id="nextStep" name="nextStep" rows="2" class="form-control"></textarea>
+                                    <div class="field-error" id="error-nextStep"></div>
+                                </div>
+                            </fieldset>
 
-            <div class="col-lg-7">
-                
-                <div class="field">
-                    <label for="evidence">Evidence * (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย http:// หรือ https://)</label>
-                    <textarea id="evidence" name="evidence" rows="3"></textarea>
-                    <div class="field-error" id="error-evidence"></div>
-                </div>
-                <button type="submit">บันทึก Item</button>
-                <button type="reset" id="btn-reset">ล้างฟอร์ม</button>
-                </form>
+                            <div class="col-lg-7">
+                                <div class="mb-3">
+                                    <label for="evidence" class="form-label">Evidence * (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย
+                                        http:// หรือ https://)</label>
+                                    <textarea id="evidence" name="evidence" rows="3" class="form-control"></textarea>
+                                    <div class="field-error" id="error-evidence"></div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">บันทึก Item</button>
+                                <button type="reset" id="btn-reset" class="btn btn-outline-secondary">ล้างฟอร์ม</button>
+                            </div>
+                        </form>
+                    </div>
                 </section>
             </div>
-            
-        </div>
     </main>
 
     <script src="js/app.js"></script>
