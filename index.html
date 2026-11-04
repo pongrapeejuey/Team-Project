@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Learning Portfolio </title>
+    <link href="CSS/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <header class="site-header">
+        <h1>Learning Portfolio</h1>
+        <div class="header-buttons">
+            <button id="btn-sample" type="button">โหลดข้อมูลตัวอย่าง (2×2)</button>
+            <button id="btn-clear" type="button">ล้างข้อมูลทั้งหมด</button>
+        </div>
+    </header>
+
+    <main>
+        <div id="status" class="alert d-none" role="alert"></div>
+
+        <section id="portfolio-section">
+            <h2>สร้าง Portfolio ใหม่</h2>
+            <form id="portfolio-form" novalidate>
+                <div class="field">
+                    <label for="displayName">ชื่อที่ต้องการแสดง *</label>
+                    <input id="displayName" name="displayName" type="text">
+                    <div class="field-error" id="error-displayName"></div>
+                </div>
+                <div class="field">
+                    <label for="enjoy">What I Enjoy (ชอบทำอะไร) *</label>
+                    <textarea id="enjoy" name="enjoy" rows="2"></textarea>
+                    <div class="field-error" id="error-enjoy"></div>
+                </div>
+                <div class="field">
+                    <label for="tried">What I've Tried (ลองทำอะไรมาแล้วบ้าง) *</label>
+                    <textarea id="tried" name="tried" rows="2"></textarea>
+                    <div class="field-error" id="error-tried"></div>
+                </div>
+                <div class="field">
+                    <label for="curious">What I'm Curious About (สนใจ/อยากรู้อะไรเพิ่ม) *</label>
+                    <textarea id="curious" name="curious" rows="2"></textarea>
+                    <div class="field-error" id="error-curious"></div>
+                </div>
+                <button type="submit">สร้าง Portfolio</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
