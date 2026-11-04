@@ -48,6 +48,92 @@
                 <button type="submit">สร้าง Portfolio</button>
             </form>
         </section>
+
+        <section id="portfolio-list-section">
+            <h2>Portfolios <span id="portfolio-count" class="count">0</span></h2>
+            <div id="portfolio-list"></div>
+        </section>
+
+        <section id="item-section">
+            <h2>เพิ่ม Portfolio Item</h2>
+            <form id="item-form" novalidate>
+                <div class="field">
+                    <label for="portfolioId">เพิ่มใน Portfolio *</label>
+                    <select id="portfolioId" name="portfolioId"></select>
+                    <div class="field-error" id="error-portfolioId"></div>
+                </div>
+                <div class="field">
+                    <label for="title">Title *</label>
+                    <input id="title" name="title" type="text">
+                    <div class="field-error" id="error-title"></div>
+                </div>
+                <div class="field">
+                    <label for="type">Type *</label>
+                    <select id="type" name="type">
+                        <option value="">เลือกประเภท</option>
+                        <option>Course Assignment</option>
+                        <option>Personal Project</option>
+                        <option>Club Activity</option>
+                        <option>Workshop</option>
+                        <option>Volunteer</option>
+                        <option>Other</option>
+                    </select>
+                    <div class="field-error" id="error-type"></div>
+                </div>
+                <div class="field">
+                    <label for="date">Date *</label>
+                    <input id="date" name="date" type="date">
+                    <div class="field-error" id="error-date"></div>
+                </div>
+                <div class="field">
+                    <label for="role">Role *</label>
+                    <input id="role" name="role" type="text">
+                    <div class="field-error" id="error-role"></div>
+                </div>
+                <div class="field">
+                    <label for="skills">Skills * (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML, CSS)</label>
+                    <input id="skills" name="skills" type="text">
+                    <div class="field-error" id="error-skills"></div>
+                </div>
+                <div class="field">
+                    <label for="description">Description *</label>
+                    <textarea id="description" name="description" rows="3"></textarea>
+                    <div class="field-error" id="error-description"></div>
+                </div>
+
+                <fieldset>
+                    <legend>Reflection</legend>
+                    <div class="field">
+                        <label for="whatIDid">What I did *</label>
+                        <textarea id="whatIDid" name="whatIDid" rows="2"></textarea>
+                        <div class="field-error" id="error-whatIDid"></div>
+                    </div>
+                    <div class="field">
+                        <label for="whatILearned">What I learned *</label>
+                        <textarea id="whatILearned" name="whatILearned" rows="2"></textarea>
+                        <div class="field-error" id="error-whatILearned"></div>
+                    </div>
+                    <div class="field">
+                        <label for="challenge">Challenge *</label>
+                        <textarea id="challenge" name="challenge" rows="2"></textarea>
+                        <div class="field-error" id="error-challenge"></div>
+                    </div>
+                    <div class="field">
+                        <label for="nextStep">Next step *</label>
+                        <textarea id="nextStep" name="nextStep" rows="2"></textarea>
+                        <div class="field-error" id="error-nextStep"></div>
+                    </div>
+                </fieldset>
+
+                <div class="field">
+                    <label for="evidence">Evidence * (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย http:// หรือ https://)</label>
+                    <textarea id="evidence" name="evidence" rows="3"></textarea>
+                    <div class="field-error" id="error-evidence"></div>
+                </div>
+                <button type="submit">บันทึก Item</button>
+                <button type="reset" id="btn-reset">ล้างฟอร์ม</button>
+            </form>
+        </section>
     </main>
 
     <script src="js/app.js"></script>
