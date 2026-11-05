@@ -1,5 +1,10 @@
 h1 {
     padding: 1px ;
+    border-top: 3px solid #FF3B30;
+    text-decoration: solid underline;
+    text-decoration-color: #FF3B30;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 10px;
 }
 
 body {
@@ -22,6 +27,7 @@ body {
 
 #portfolio-section {
     background-color: #0099FF;
+    color: #FDFDFE;
     padding: 5px;
     margin: 5px;
     border-radius: 16px;
@@ -29,6 +35,7 @@ body {
 
 #portfolio-form {
     background-color: #c9e9ff;
+    color: black;
     padding: 18px;
     margin: 3px;
     border-radius: 18px;
@@ -42,7 +49,7 @@ body {
 }
 
 #portfolio-list {
-    background-color: #ffd6d6;
+    background-color: #FDFDFE;;
     margin: 3px;
     padding: 18px;
     border-radius: 18px;
