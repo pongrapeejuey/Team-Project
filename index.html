@@ -13,7 +13,7 @@
 
     <header class="site-header py-3 mb-4">
         <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
-            <h1 class="h3 m-0">Learning Portfolio</h1>
+            <h1 class="h2 m-0">Learning Portfolio</h1>
             <div class="d-flex gap-2">
                 <button id="btn-sample" type="button" class="btn btn-outline-primary btn-sm">โหลดข้อมูลตัวอย่าง</button>
                 <button id="btn-clear" type="button" class="btn btn-outline-danger btn-sm">ล้างข้อมูลทั้งหมด</button>
@@ -31,23 +31,24 @@
                     <div class="card-body">
                         <form id="portfolio-form" class="form-card" novalidate>
                             <div class="mb-3">
-                                <label for="displayName" class="form-label">ชื่อที่ต้องการแสดง *</label>
+                                <label for="displayName" class="form-label">ชื่อที่ต้องการแสดง <span class="text-danger">*</span></label>
                                 <input id="displayName" name="displayName" type="text" class="form-control">
                                 <div class="field-error" id="error-displayName"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="enjoy" class="form-label">What I Enjoy (ชอบทำอะไร) *</label>
+                                <label for="enjoy" class="form-label">What I Enjoy (ชอบทำอะไร) <span class="text-danger">*</span></label>
                                 <textarea id="enjoy" name="enjoy" rows="2" class="form-control"></textarea>
                                 <div class="field-error" id="error-enjoy"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="tried" class="form-label">What I've Tried (ลองทำอะไรมาแล้วบ้าง) *</label>
+                                <label for="tried" class="form-label">What I've Tried (ลองทำอะไรมาแล้วบ้าง) <span class="text-danger">*</span></label>
                                 <textarea id="tried" name="tried" rows="2" class="form-control"></textarea>
                                 <div class="field-error" id="error-tried"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="curious" class="form-label">What I'm Curious About (สนใจ/อยากรู้อะไรเพิ่ม)
-                                    *</label>
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <textarea id="curious" name="curious" rows="2" class="form-control"></textarea>
                                 <div class="field-error" id="error-curious"></div>
                             </div>
@@ -70,18 +71,18 @@
                     <div class="card-body">
                         <form id="item-form" class="form-card" novalidate>
                             <div class="mb-3">
-                                <label for="portfolioId" class="form-label">เพิ่มใน Portfolio *</label>
+                                <label for="portfolioId" class="form-label">เพิ่มใน Portfolio <span class="text-danger">*</span></label>
                                 <select id="portfolioId" name="portfolioId" class="form-select"></select>
                                 <div class="field-error" id="error-portfolioId"></div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="title" class="form-label">Title *</label>
+                                    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
                                     <input id="title" name="title" type="text" class="form-control">
                                     <div class="field-error" id="error-title"></div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="type" class="form-label">Type *</label>
+                                    <label for="type" class="form-label">Type <span class="text-danger">*</span></label>
                                     <select id="type" name="type" class="form-select">
                                         <option value="">เลือกประเภท</option>
                                         <option>Course Assignment</option>
@@ -94,24 +95,24 @@
                                     <div class="field-error" id="error-type"></div>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="date" class="form-label">Date *</label>
+                                    <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
                                     <input id="date" name="date" type="date" class="form-control">
                                     <div class="field-error" id="error-date"></div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="role" class="form-label">Role *</label>
+                                <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
                                 <input id="role" name="role" type="text" class="form-control">
                                 <div class="field-error" id="error-role"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="skills" class="form-label">Skills * (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML,
+                                <label for="skills" class="form-label">Skills <span class="text-danger">*</span> (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML,
                                     CSS)</label>
                                 <input id="skills" name="skills" type="text" class="form-control">
                                 <div class="field-error" id="error-skills"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="description" class="form-label">Description *</label>
+                                <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
                                 <textarea id="description" name="description" rows="3" class="form-control"></textarea>
                                 <div class="field-error" id="error-description"></div>
                             </div>
@@ -119,23 +120,23 @@
                             <fieldset class="mb-3">
                                 <legend class="h6">Reflection</legend>
                                 <div class="mb-3">
-                                    <label for="whatIDid" class="form-label">What I did *</label>
+                                    <label for="whatIDid" class="form-label">What I did <span class="text-danger">*</span></label>
                                     <textarea id="whatIDid" name="whatIDid" rows="2" class="form-control"></textarea>
                                     <div class="field-error" id="error-whatIDid"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="whatILearned" class="form-label">What I learned *</label>
+                                    <label for="whatILearned" class="form-label">What I learned <span class="text-danger">*</span></label>
                                     <textarea id="whatILearned" name="whatILearned" rows="2"
                                         class="form-control"></textarea>
                                     <div class="field-error" id="error-whatILearned"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="challenge" class="form-label">Challenge *</label>
+                                    <label for="challenge" class="form-label">Challenge <span class="text-danger">*</span></label>
                                     <textarea id="challenge" name="challenge" rows="2" class="form-control"></textarea>
                                     <div class="field-error" id="error-challenge"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="nextStep" class="form-label">Next step *</label>
+                                    <label for="nextStep" class="form-label">Next step <span class="text-danger">*</span></label>
                                     <textarea id="nextStep" name="nextStep" rows="2" class="form-control"></textarea>
                                     <div class="field-error" id="error-nextStep"></div>
                                 </div>
@@ -143,7 +144,7 @@
 
                             <div class="col-12">
                                 <div class="mb-3">
-                                    <label for="evidence" class="form-label">Evidence * (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย
+                                    <label for="evidence" class="form-label">Evidence <span class="text-danger">*</span> (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย
                                         http:// หรือ https://)</label>
                                     <textarea id="evidence" name="evidence" rows="3" class="form-control"></textarea>
                                     <div class="field-error" id="error-evidence"></div>
