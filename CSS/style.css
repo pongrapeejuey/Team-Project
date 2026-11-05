@@ -42,15 +42,166 @@ body {
 }
 
 #portfolio-list-section {
-    background-color: #FF3B30;
+    background-color: #FDFDFE;
     padding: 5px;
     margin: 5px;
     border-radius: 16px;
+    border: 2px solid #5b5a5a;
 }
 
+/* Portfolios Header */
+#portfolio-list-section .card-header {
+    background-color: #a7a5a5;
+    color: #FDFDFE;
+    border-radius: 12px 12px 0 0;
+    padding: 15px;
+}
+
+/* Portfolio List */
 #portfolio-list {
-    background-color: #FDFDFE;;
-    margin: 3px;
+
+    background-color: #FDFDFE;
     padding: 18px;
     border-radius: 18px;
 }
+
+/* Add Portfolio Item Section */
+
+#item-section {
+    background-color: #FDFDFE;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 16px;
+    border: 2px solid #D3D3D3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Section Header */
+#item-section .card-header {
+    background-color: #CC310E;
+    color: #FDFDFE;
+    border-radius: 12px 12px 0 0;
+    padding: 15px;
+    font-weight: bold;
+}
+
+/* Form Area */
+#item-section .card-body {
+    background-color: #FDFDFE;
+    padding: 20px;
+    border-radius: 0 0 12px 12px;
+}
+
+/* Input Fields */
+#item-section .form-control,
+#item-section .form-select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #CC310E;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#item-section .form-control:focus,
+#item-section .form-select:focus {
+    border-color: #CC310E;
+    box-shadow: 0 0 0 3px rgba(204, 49, 14, 0.15);
+}
+
+/* Form Labels */
+#item-section .form-label {
+    color: #333333;
+    font-weight: 600;
+}
+
+/* Reflection Section */
+#item-section fieldset {
+    border: 1px solid #CC310E;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+#item-section legend {
+    color: #CC310E;
+    font-weight: bold;
+}
+
+/* Buttons */
+#item-section .btn-primary {
+   background-color: #CC310E;
+   border-color: #CC310E;
+    border-radius: 8px;
+}
+
+#item-section .btn-primary:hover {
+    background-color: #007acc;
+    border-color: #007acc;
+}
+
+#item-section .btn-outline-secondary {
+    color: #CC310E;
+    border-color: #CC310E;
+    border-radius: 8px;
+}
+
+#item-section .btn-outline-secondary:hover {
+    background-color: #CC310E;
+    color: #FDFDFE;
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+    #item-section .card-body {
+        padding: 12px;
+    }
+
+    #item-section .btn {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+main > .row {
+    justify-content: center;
+}
+
+/* Center and Expand Main Content */
+main.container {
+    max-width: 1200px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Expand All Portfolio Sections */
+main > .row {
+    justify-content: center;
+}
+
+main > .row > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* Expand Form Fields */
+#portfolio-section,
+#portfolio-list-section,
+#item-section {
+    width: 100%;
+}
+
+/* Expand Input Fields */
+#item-section .form-control,
+#item-section .form-select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    main.container {
+        width: 96%;
+    }
+}
+
