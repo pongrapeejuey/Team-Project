@@ -54,3 +54,12 @@ body {
     padding: 18px;
     border-radius: 18px;
 }
+
+/* Button Hover */
+#btn-sample:hover {
+    color: #333333;
+}
+
+#btn-clear:hover {
+    color: #333333;
+}
