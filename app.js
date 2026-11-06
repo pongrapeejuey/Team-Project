@@ -21,8 +21,26 @@ function showPortfolio(portfolio) {
     const itemsBox = document.createElement("div");
     (portfolio.items || []).forEach(function (item) {
         const itemEl = document.createElement("p");
-        itemEl.className = "small mb-1";
-        itemEl.textContent = "• " + item.title + " (" + item.type + ", " + item.date + ")";
+        itemEl.className = "small mb-3";
+        itemEl.style.whiteSpace = "pre-line";
+        itemEl.textContent = "- " + item.title + " (" + item.type + ", " + item.date + ")"+
+            "\nRole: " + item.role + "\nSkills: " + item.skills +
+            "\nDescription: " + item.description +
+            "\nWhat I did: " + item.whatIDid +
+            "\nWhat I learned: " + item.whatILearned +
+            "\nChallenge: " + item.challenge +
+            "\nNext step: " + item.nextStep +
+            "\nEvidence: ";
+        if (/^https?:\/\//i.test(item.evidence)) {
+            const link = document.createElement("a");
+            link.href = item.evidence;
+            link.textContent = item.evidence;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            itemEl.appendChild(link);
+        } else {
+        itemEl.appendChild(document.createTextNode(item.evidence));
+        }
         itemsBox.appendChild(itemEl);
     });
     card.appendChild(itemsBox);
