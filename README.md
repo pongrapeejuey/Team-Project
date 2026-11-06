@@ -5,7 +5,7 @@
 โปรเจกต์กลุ่มรายวิชา CS100
 
 - **Repository:** https://github.com/pongrapeejuey/Team-Project
-- **Commit SHA ที่ส่งตรวจ:** `[ใส่ SHA เต็มจาก git log -1 หลังโค้ดนิ่ง]`
+- **Commit SHA ที่ส่งตรวจ:** `commit af93dc6ca7eefe3ba4e52ac03ecab1e3f756b35b
 
 ## Features
 
@@ -108,13 +108,4 @@ Save → Refresh → Load, เปิดอีก Browser, ดูบน Mobile
 ใช้ GitHub Issues ตาม workflow **Issue → Implement → Test → Commit → Close**
 โดยทุกงานมีผู้รับผิดชอบ วิธีทดสอบ และหลักฐาน commit message อ้างเลข issue เช่น `Add form validation (#12)`
 
-| สมาชิก | GitHub | บทบาท |
-|---|---|---|
-| [ชื่อ] | [@username] | [บทบาท] |
-| [ชื่อ] | [@username] | [บทบาท] |
-| [ชื่อ] | [@yanakonCharoenchaturong](https://github.com/yanakonCharoenchaturong) | Tester / Support |
 
-## หมายเหตุ
-
-- ข้อมูลทั้งหมดในระบบทดลองเป็นข้อมูลสมมติ ไม่มีข้อมูลส่วนตัวหรือข้อมูล sensitive
-- ใช้ AI ช่วยศึกษาและเขียนโค้ดได้ แต่ผู้รับผิดชอบต้องตรวจ ทดสอบ และอธิบายโค้ดของตนเองได้
