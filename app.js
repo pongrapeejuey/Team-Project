@@ -66,6 +66,15 @@ function renderSelect() {
     });
 }
 
+function validUrl(text) {
+    try {
+        const url = new URL(text);
+        return url.protocol === "http:" || url.protocol === "https:";
+    } catch (e) {
+        return false;
+    }
+}
+
 form.addEventListener("submit", function (event) { 
     event.preventDefault();
 
@@ -184,6 +193,11 @@ itemForm.addEventListener("submit", function (event){
     if (evidence === ""){
         errorEvidence.textContent = "Please enter your link.";
         valid = false ;}
+    else if (!validUrl(evidence)){
+    errorEvidence.textContent = "Please enter a valid URL (must start with http:// or https://).";
+    valid = false ;
+    }
+
     if (!valid){
     return;
     }
