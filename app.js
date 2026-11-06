@@ -3,6 +3,8 @@ const list = document.querySelector("#portfolio-list");
 const count = document.querySelector("#portfolio-count");
 const STORAGE_KEY = 'powerup-portfolio';
 
+let portfolios = [];
+
 function showPortfolio(portfolio) {
     const card = document.createElement("div");
     card.className = "card p-3 mb-2"
@@ -61,6 +63,8 @@ form.addEventListener("submit", function (event) {
         whatImCurious: curious
     }
 
+    portfolios.push(portfolio);
+    showPortfolio(portfolio);
     localStorage.setItem(STORAGE_KEY,JSON.stringify(portfolio));
     form.reset();
 });
@@ -70,3 +74,4 @@ if (savedData !== null) {
 const savedPortfolio = JSON.parse(savedData);
 showPortfolio(savedPortfolio);
 }
+
