@@ -1,33 +1,39 @@
 h1 {
-    padding: 1px ;
-    border-top: 3px solid #FF3B30;
+    padding: 1px;
+    border-top: 3px solid #bcb9b9;
     text-decoration: solid underline;
-    text-decoration-color: #FF3B30;
+    text-decoration-color: #a5b3c0;
     text-decoration-thickness: 3px;
     text-underline-offset: 10px;
 }
 
 body {
     background-color: #FDFDFE;
+    font-family: Serif;
 }
 
-#btn-sample {
-    background-color: #d6eeff;
-    border-radius: 15px;
-    padding: 5px;
-    margin: 8px;
+.site-header {
+    background-color: #fdfdfd;
+   
 }
-
+#btn-import,
 #btn-clear {
-    background-color: rgb(255, 225, 225);
-    border-radius: 15px;
-    padding: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 16px;
     margin: 8px;
+    border-radius: 15px;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.2;
+    background-color: #ffffff;
 }
 
 #portfolio-section {
-    background-color: #0099FF;
-    color: #FDFDFE;
+    background-color: #19abfa;
+    color: #ffffff;
     padding: 5px;
     margin: 5px;
     border-radius: 16px;
@@ -42,24 +48,28 @@ body {
 }
 
 #portfolio-list-section {
-    background-color: #FF3B30;
+    background-color: #ff6161;
     padding: 5px;
     margin: 5px;
     border-radius: 16px;
 }
 
 #portfolio-list {
-    background-color: #FDFDFE;;
+    background-color: #FDFDFE;
     margin: 3px;
     padding: 18px;
     border-radius: 18px;
 }
 
+
 /* Button Hover */
-#btn-sample:hover {
-    color: #333333;
+
+#btn-import:hover {
+    color: #001bb1;
+    background-color: #b4e5fa;
 }
 
 #btn-clear:hover {
-    color: #333333;
+    color: #920000;
+     background-color: #ff9393;
 }

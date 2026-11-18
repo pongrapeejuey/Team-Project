@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Learning Portfolio </title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="CSS/style.css" rel="stylesheet">
 </head>
 
@@ -15,21 +15,23 @@
         <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
             <h1 class="h1 m-0">Learning Portfolio</h1>
             <div class="d-flex gap-2">
-                <button id="btn-sample" type="button" class="btn btn-outline-primary btn-sm">โหลดข้อมูลตัวอย่าง</button>
+                <label id="btn-import" for="import-file" class="btn btn-outline-primary btn-sm mb-0">IMPORT FILE</label>
+                <input id="import-file" type="file" accept=".json,application/json" class="visually-hidden">
                 <button id="btn-clear" type="button" class="btn btn-outline-danger btn-sm">ล้างข้อมูลทั้งหมด</button>
             </div>
         </div>
     </header>
 
-    <main class="container-fluid px-4"> 
+    <main class="container-fluid px-4">
         <div id="status" class="alert d-none" role="alert"></div>
 
         <div class="row g-4">
-            
+
             <div class="col-lg-4">
-                
+
                 <section id="portfolio-list-section" class="card box mb-4">
-                    <h2 class="card-header h5 m-0 text-white">Portfolios <span id="portfolio-count" class="badge text-bg-secondary">0</span></h2>
+                    <h2 class="card-header h5 m-0 text-white">Portfolios <span id="portfolio-count"
+                            class="badge text-bg-secondary">0</span></h2>
                     <div class="card-body">
                         <div id="portfolio-list" class="row g-3"></div>
                     </div>
@@ -40,22 +42,26 @@
                     <div class="card-body">
                         <form id="portfolio-form" class="form-card" novalidate>
                             <div class="mb-3">
-                                <label for="displayName" class="form-label">ชื่อที่ต้องการแสดง <span class="text-danger">*</span></label>
+                                <label for="displayName" class="form-label">ชื่อที่ต้องการแสดง <span
+                                        class="text-danger">*</span></label>
                                 <input id="displayName" name="displayName" type="text" class="form-control">
                                 <div class="field-error text-danger small mt-1" id="error-displayName"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="enjoy" class="form-label">What I Enjoy (ชอบทำอะไร) <span class="text-danger">*</span></label>
+                                <label for="enjoy" class="form-label">What I Enjoy (ชอบทำอะไร) <span
+                                        class="text-danger">*</span></label>
                                 <textarea id="enjoy" name="enjoy" rows="2" class="form-control"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-enjoy"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="tried" class="form-label">What I've Tried (ลองทำอะไรมาแล้วบ้าง) <span class="text-danger">*</span></label>
+                                <label for="tried" class="form-label">What I've Tried (ลองทำอะไรมาแล้วบ้าง) <span
+                                        class="text-danger">*</span></label>
                                 <textarea id="tried" name="tried" rows="2" class="form-control"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-tried"></div>
                             </div>
                             <div class="mb-3">
-                                <label for="curious" class="form-label">What I'm Curious About (สนใจ/อยากรู้อะไรเพิ่ม) <span class="text-danger">*</span></label>
+                                <label for="curious" class="form-label">What I'm Curious About (สนใจ/อยากรู้อะไรเพิ่ม)
+                                    <span class="text-danger">*</span></label>
                                 <textarea id="curious" name="curious" rows="2" class="form-control"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-curious"></div>
                             </div>
@@ -67,20 +73,22 @@
             </div>
 
             <div class="col-lg-8">
-                
+
                 <section id="item-section" class="card box mb-4">
                     <h2 class="card-header h5 m-0">เพิ่ม Portfolio Item</h2>
                     <div class="card-body">
                         <form id="item-form" class="form-card" novalidate>
                             <div class="mb-3">
-                                <label for="portfolioId" class="form-label">เพิ่มใน Portfolio <span class="text-danger">*</span></label>
+                                <label for="portfolioId" class="form-label">เพิ่มใน Portfolio <span
+                                        class="text-danger">*</span></label>
                                 <select id="portfolioId" name="portfolioId" class="form-select"></select>
                                 <div class="field-error text-danger small mt-1" id="error-portfolioId"></div>
                             </div>
-                            
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="title" class="form-label">Title <span class="text-danger">*</span></label>
+                                    <label for="title" class="form-label">Title <span
+                                            class="text-danger">*</span></label>
                                     <input id="title" name="title" type="text" class="form-control">
                                     <div class="field-error text-danger small mt-1" id="error-title"></div>
                                 </div>
@@ -109,15 +117,17 @@
                                 <input id="role" name="role" type="text" class="form-control">
                                 <div class="field-error text-danger small mt-1" id="error-role"></div>
                             </div>
-                            
+
                             <div class="mb-3">
-                                <label for="skills" class="form-label">Skills <span class="text-danger">*</span> (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML, CSS)</label>
+                                <label for="skills" class="form-label">Skills <span class="text-danger">*</span>
+                                    (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML, CSS)</label>
                                 <input id="skills" name="skills" type="text" class="form-control">
                                 <div class="field-error text-danger small mt-1" id="error-skills"></div>
                             </div>
-                            
+
                             <div class="mb-3">
-                                <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                                <label for="description" class="form-label">Description <span
+                                        class="text-danger">*</span></label>
                                 <textarea id="description" name="description" rows="3" class="form-control"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-description"></div>
                             </div>
@@ -125,29 +135,35 @@
                             <fieldset class="mb-3 p-3 border rounded bg-light">
                                 <legend class="h6 w-auto px-2">Reflection</legend>
                                 <div class="mb-3">
-                                    <label for="whatIDid" class="form-label">What I did <span class="text-danger">*</span></label>
+                                    <label for="whatIDid" class="form-label">What I did <span
+                                            class="text-danger">*</span></label>
                                     <textarea id="whatIDid" name="whatIDid" rows="2" class="form-control"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-whatIDid"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="whatILearned" class="form-label">What I learned <span class="text-danger">*</span></label>
-                                    <textarea id="whatILearned" name="whatILearned" rows="2" class="form-control"></textarea>
+                                    <label for="whatILearned" class="form-label">What I learned <span
+                                            class="text-danger">*</span></label>
+                                    <textarea id="whatILearned" name="whatILearned" rows="2"
+                                        class="form-control"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-whatILearned"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="challenge" class="form-label">Challenge <span class="text-danger">*</span></label>
+                                    <label for="challenge" class="form-label">Challenge <span
+                                            class="text-danger">*</span></label>
                                     <textarea id="challenge" name="challenge" rows="2" class="form-control"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-challenge"></div>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="nextStep" class="form-label">Next step <span class="text-danger">*</span></label>
+                                    <label for="nextStep" class="form-label">Next step <span
+                                            class="text-danger">*</span></label>
                                     <textarea id="nextStep" name="nextStep" rows="2" class="form-control"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-nextStep"></div>
                                 </div>
                             </fieldset>
 
                             <div class="mb-4">
-                                <label for="evidence" class="form-label">Evidence <span class="text-danger">*</span> (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย http:// หรือ https://)</label>
+                                <label for="evidence" class="form-label">Evidence <span class="text-danger">*</span>
+                                    (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย http:// หรือ https://)</label>
                                 <textarea id="evidence" name="evidence" rows="3" class="form-control"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-evidence"></div>
                             </div>
@@ -162,7 +178,7 @@
 
             </div>
 
-        </div>    
+        </div>
     </main>
 
     <script src="app.js"></script>
