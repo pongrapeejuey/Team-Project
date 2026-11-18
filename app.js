@@ -244,4 +244,23 @@ if (savedData !== null) {
     renderSelect();
 }
 
+const clearModalEl = document.querySelector("#clearModal");
+
+clearModalEl.addEventListener("show.bs.modal", function () {
+    const itemCount = portfolios.reduce(function (sum, p) {
+        return sum + (p.items ? p.items.length : 0);
+    }, 0);
+    document.querySelector("#clearModalText").textContent =
+        "จะลบ " + portfolios.length + " Portfolio และ " + itemCount +
+        " Item ทั้งหมด และกู้คืนไม่ได้";
+});
+
+document.querySelector("#btn-clear-confirm").addEventListener("click", function () {
+    portfolios = [];
+    localStorage.removeItem(STORAGE_KEY);
+    renderList();
+    renderSelect();
+    bootstrap.Modal.getInstance(clearModalEl).hide();
+});
+
 
