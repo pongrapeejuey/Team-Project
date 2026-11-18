@@ -73,3 +73,44 @@ body {
     color: #920000;
      background-color: #ff9393;
 }
+
+/* Clear confirm modal */
+.clear-modal {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(146, 0, 0, 0.25);
+}
+
+.clear-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    color: #920000;
+    background-color: #ffe1e1;
+    animation: clear-pop 0.35s ease-out;
+}
+
+.clear-btn {
+    min-width: 120px;
+    height: 40px;
+    border-radius: 15px;
+    font-family: inherit;
+}
+
+@keyframes clear-pop {
+    0%   { transform: scale(0.5); opacity: 0; }
+    70%  { transform: scale(1.1); }
+    100% { transform: scale(1);   opacity: 1; }
+}
+
+#clearModal.fade .modal-dialog {
+    transform: translateY(-20px) scale(0.96);
+    transition: transform 0.25s ease-out;
+}
+
+#clearModal.show .modal-dialog {
+    transform: none;
+}
