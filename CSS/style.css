@@ -114,3 +114,8 @@ body {
 #clearModal.show .modal-dialog {
     transform: none;
 }
+
+/* สีข้อความตย.  */
+.form-control::placeholder {
+    color: #949494;
+}
