@@ -235,32 +235,40 @@ itemForm.addEventListener("submit", function (event){
     itemForm.reset(); 
 });
 
+try {
+    const savedData = localStorage.getItem(STORAGE_KEY);
+    if (savedData !== null) {
+        const parsed = JSON.parse(savedData);
+        portfolios = Array.isArray(parsed) ? parsed : [];
+        }
+    } catch (e) {
+    portfolios = [];
+    }
+renderList();
+renderSelect();
 
-const savedData = localStorage.getItem(STORAGE_KEY);
-if (savedData !== null) {
-    const parsed = JSON.parse(savedData);
-    portfolios = Array.isArray(parsed) ? parsed : [];
-    portfolios.forEach(showPortfolio);
-    renderSelect();
-}
-
+// ปุ่มล้างข้อมูล//
 const clearModalEl = document.querySelector("#clearModal");
+const clearConfirmBtn = document.querySelector("#btn-clear-confirm");
 
-clearModalEl.addEventListener("show.bs.modal", function () {
-    const itemCount = portfolios.reduce(function (sum, p) {
-        return sum + (p.items ? p.items.length : 0);
+if (clearModalEl && clearConfirmBtn) {
+    clearModalEl.addEventListener("show.bs.modal", function () {
+        const itemCount = portfolios.reduce(function (sum, p) {
+            return sum + (p.items ? p.items.length : 0);
     }, 0);
+
     document.querySelector("#clearModalText").textContent =
         "จะลบ " + portfolios.length + " Portfolio และ " + itemCount +
         " Item ทั้งหมด และกู้คืนไม่ได้";
-});
+    });
 
-document.querySelector("#btn-clear-confirm").addEventListener("click", function () {
-    portfolios = [];
-    localStorage.removeItem(STORAGE_KEY);
-    renderList();
-    renderSelect();
-    bootstrap.Modal.getInstance(clearModalEl).hide();
-});
-
+    document.querySelector("#btn-clear-confirm").addEventListener("click", function () {
+        bootstrap.Modal.getOrCreateInstance(clearModalEl).hide();
+        portfolios = [];
+        localStorage.removeItem(STORAGE_KEY);
+        renderList();
+        renderSelect();
+        
+    });
+}
 
