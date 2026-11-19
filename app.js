@@ -6,6 +6,67 @@ const STORAGE_KEY = 'powerup-portfolio';
 
 let portfolios = [];
 
+function savePortfolios() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolios));
+    } catch (e) {
+        console.warn("localStorage save failed", e);
+    }
+
+    return fetch("api.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(portfolios)
+    })
+    .then(function (res) {
+        if (!res.ok) throw new Error("Save failed");
+        return res.json();
+    })
+    .catch(function (err) {
+        console.warn("Server save failed:", err.message);
+        alert("บันทึกลงเครื่องแล้ว แต่ส่งไปเก็บที่ server ไม่สำเร็จ");
+    });
+}
+
+function loadFromLocal() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved !== null) {
+            const parsed = JSON.parse(saved);
+            return Array.isArray(parsed) ? parsed : [];
+        }
+    } catch (e) {}
+    return [];
+}
+
+function loadPortfolios() {
+    return fetch("api.php")
+        .then(function (res) {
+            if (!res.ok) throw new Error("Load failed");
+            return res.json();
+        })
+        .then(function (data) {
+            portfolios = Array.isArray(data) ? data : [];
+
+            // ถ้า server ว่าง แต่ในเครื่องมีข้อมูล ให้ใช้ของในเครื่อง แล้วส่งขึ้น server
+            if (portfolios.length === 0) {
+                const local = loadFromLocal();
+                if (local.length > 0) {
+                    portfolios = local;
+                    savePortfolios();
+                }
+            }
+        })
+        .catch(function () {
+            // server ใช้ไม่ได้ → ใช้ localStorage แทน
+            portfolios = loadFromLocal();
+        })
+        .then(function () {
+            renderList();
+            renderSelect();
+        });
+}
+
 function showPortfolio(portfolio) {
     const card = document.createElement("div");
     card.className = "card p-3 mb-2"
@@ -75,6 +136,17 @@ function validUrl(text) {
     }
 }
 
+function nextItemId() {
+    let max = 0;
+    portfolios.forEach(function (p) {
+        (p.items || []).forEach(function (it) {
+            const n = parseInt(it.id, 10);
+            if (!isNaN(n) && n > max) max = n;
+        });
+    });
+    return String(max + 1).padStart(3, "0");  
+}
+
 form.addEventListener("submit", function (event) { 
     event.preventDefault();
 
@@ -120,7 +192,7 @@ form.addEventListener("submit", function (event) {
     portfolios.push(portfolio);
     showPortfolio(portfolio);
     renderSelect(); 
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(portfolios));
+    savePortfolios();
     form.reset();
 });
 
@@ -216,6 +288,7 @@ itemForm.addEventListener("submit", function (event){
     errorEvidence.textContent = '';
 
     const item = {
+        id: nextItemId(),
         title: title,
         type: type,
         date: date,
@@ -230,22 +303,12 @@ itemForm.addEventListener("submit", function (event){
     };
 
     portfolios[index].items.push(item);                              
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolios));   
+    savePortfolios();   
     renderList();                                                     
     itemForm.reset(); 
 });
 
-try {
-    const savedData = localStorage.getItem(STORAGE_KEY);
-    if (savedData !== null) {
-        const parsed = JSON.parse(savedData);
-        portfolios = Array.isArray(parsed) ? parsed : [];
-        }
-    } catch (e) {
-    portfolios = [];
-    }
-renderList();
-renderSelect();
+loadPortfolios();
 
 // ปุ่มล้างข้อมูล//
 const clearModalEl = document.querySelector("#clearModal");
@@ -266,6 +329,7 @@ if (clearModalEl && clearConfirmBtn) {
         bootstrap.Modal.getOrCreateInstance(clearModalEl).hide();
         portfolios = [];
         localStorage.removeItem(STORAGE_KEY);
+        savePortfolios();
         renderList();
         renderSelect();
         
