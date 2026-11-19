@@ -119,3 +119,19 @@ body {
 .form-control::placeholder {
     color: #949494;
 }
+
+/* ===== ปุ่ม Export JSON และปุ่ม X ลบ Portfolio  ===== */
+#portfolio-list .card h4 {
+    padding-right: 28px;
+}
+
+.btn-delete-portfolio  {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+}
+
+
+.btn-export {
+    border-radius: 12px;
+}
