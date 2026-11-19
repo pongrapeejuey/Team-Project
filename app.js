@@ -105,6 +105,26 @@ function showPortfolio(portfolio) {
         itemsBox.appendChild(itemEl);
     });
     card.appendChild(itemsBox);
+
+    // ===== เพิ่ม ปุ่ม Export JSON ตรงportfolio และปุ่ม X ลบ Portfolio (frontช่วย) =====
+    const exportBtn = document.createElement("button");
+    exportBtn.type = "button";
+    exportBtn.className = "btn btn-outline-primary w-100 mt-2 btn-export";
+    exportBtn.textContent = "EXPORT JSON";
+    exportBtn.addEventListener("click", function () {
+        exportPortfolio(portfolio);
+    });
+    card.appendChild(exportBtn);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className = "btn-close btn-delete-portfolio";
+    deleteBtn.setAttribute("aria-label", "ลบ Portfolio นี้");
+    deleteBtn.addEventListener("click", function () {
+        deletePortfolio(portfolio);
+    });
+    card.appendChild(deleteBtn);
+    // ===== จบส่วนปุ่มexport ปุ่มลบ =====
     list.appendChild(card);
 
     count.textContent = list.children.length;
@@ -338,3 +358,30 @@ if (clearModalEl && clearConfirmBtn) {
     });
 }
 
+// ===== เพิ่มใหม่: ฟังก์ชัน Export JSON และ ลบ Portfolio (front  ช่วย) =====
+function exportPortfolio(portfolio) {
+    const data = JSON.stringify([portfolio], null, 2);
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "portfolio-" + portfolio.displayName.replace(/[\\/:*?"<>|\s]+/g, "_") + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function deletePortfolio(portfolio) {
+    const index = portfolios.indexOf(portfolio);
+    if (index === -1) {
+        return;
+    }
+    if (!confirm('ลบ Portfolio "' + portfolio.displayName + '" ใช่หรือไม่? กู้คืนไม่ได้')) {
+        return;
+    }
+    portfolios.splice(index, 1);
+    savePortfolios();
+    renderList();
+    renderSelect();
+}
