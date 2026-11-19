@@ -48,7 +48,7 @@ function loadPortfolios() {
         .then(function (data) {
             portfolios = Array.isArray(data) ? data : [];
 
-            // ถ้า server ว่าง แต่ในเครื่องมีข้อมูล ให้ใช้ของในเครื่อง แล้วส่งขึ้น server
+            
             if (portfolios.length === 0) {
                 const local = loadFromLocal();
                 if (local.length > 0) {
@@ -58,7 +58,7 @@ function loadPortfolios() {
             }
         })
         .catch(function () {
-            // server ใช้ไม่ได้ → ใช้ localStorage แทน
+            
             portfolios = loadFromLocal();
         })
         .then(function () {
@@ -301,7 +301,9 @@ itemForm.addEventListener("submit", function (event){
         nextStep:nextStep,
         evidence:evidence
     };
-
+    if (!Array.isArray(portfolios[index].items)) {
+        portfolios[index].items = [];
+    }
     portfolios[index].items.push(item);                              
     savePortfolios();   
     renderList();                                                     
