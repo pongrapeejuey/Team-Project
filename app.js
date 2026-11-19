@@ -92,16 +92,22 @@ function showPortfolio(portfolio) {
             "\nChallenge: " + item.challenge +
             "\nNext step: " + item.nextStep +
             "\nEvidence: ";
-        if (/^https?:\/\//i.test(item.evidence)) {
-            const link = document.createElement("a");
-            link.href = item.evidence;
-            link.textContent = item.evidence;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            itemEl.appendChild(link);
+         String(item.evidence || "")
+            .split(/[\s,]+/)
+            .map(function (s) { return s.trim(); })
+            .filter(Boolean)
+            .forEach(function (url, i) {
+                itemEl.appendChild(document.createTextNode(i === 0 ? "\n" : "\n\n"));
+                if (/^https?:\/\//i.test(url)) {
+                    const link = document.createElement("a");
+                    link.href = url ;
+                    link.textContent = url;
+                    link.target = "_blank";
+                    link.rel = "noopener noreferrer";
+                    itemEl.appendChild(link);
         } else {
-        itemEl.appendChild(document.createTextNode(item.evidence));
-        }
+        itemEl.appendChild(document.createTextNode(url));
+        }});
         itemsBox.appendChild(itemEl);
     });
     card.appendChild(itemsBox);
@@ -282,12 +288,16 @@ itemForm.addEventListener("submit", function (event){
     if (nextStep === ""){
         errorNextStep.textContent = "Please enter your data.";
         valid = false ;}
-    if (evidence === ""){
+    const evidenceList = evidence.split(/[\s,]+/)
+        .map(function (s) { return s.trim(); })
+        .filter(Boolean);
+
+    if (evidenceList.length === 0){
         errorEvidence.textContent = "Please enter your link.";
         valid = false ;}
-    else if (!validUrl(evidence)){
-    errorEvidence.textContent = "Please enter a valid URL (must start with http:// or https://).";
-    valid = false ;
+    else if (!evidenceList.every(validUrl)){
+        errorEvidence.textContent = "Please enter valid URLs, one per line (must start with http:// or https://).";
+        valid = false ;
     }
 
     if (!valid){
@@ -319,7 +329,7 @@ itemForm.addEventListener("submit", function (event){
         whatILearned:whatILearned,
         challenge:challenge,
         nextStep:nextStep,
-        evidence:evidence
+        evidence: evidenceList.join("\n")
     };
     if (!Array.isArray(portfolios[index].items)) {
         portfolios[index].items = [];
