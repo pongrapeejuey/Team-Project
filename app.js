@@ -7,13 +7,15 @@ const STORAGE_KEY = 'powerup-portfolio';
 let portfolios = [];
 
 function savePortfolios() {
+    let localOk = true;
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(portfolios));
     } catch (e) {
+        localOk = false;
         console.warn("localStorage save failed", e);
     }
 
-    return fetch("api.php", {
+    return fetch("echo.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(portfolios)
@@ -22,9 +24,19 @@ function savePortfolios() {
         if (!res.ok) throw new Error("Save failed");
         return res.json();
     })
+    .then(function (data) {
+        if (!localOk) {
+            alert("บันทึกที่ server แล้ว แต่บันทึกลงเครื่องไม่สำเร็จ");
+        }
+        return data;
+    })
     .catch(function (err) {
         console.warn("Server save failed:", err.message);
-        alert("บันทึกลงเครื่องแล้ว แต่ส่งไปเก็บที่ server ไม่สำเร็จ");
+        if (localOk) {
+            alert("บันทึกลงเครื่องแล้ว แต่ส่งไปเก็บที่ server ไม่สำเร็จ");
+        } else {
+            alert("บันทึกไม่สำเร็จ ทั้งในเครื่องและที่ server ข้อมูลอาจหายถ้าปิดหน้านี้");
+        }
     });
 }
 
@@ -40,7 +52,7 @@ function loadFromLocal() {
 }
 
 function loadPortfolios() {
-    return fetch("api.php")
+    return fetch("echo.php")
         .then(function (res) {
             if (!res.ok) throw new Error("Load failed");
             return res.json();
