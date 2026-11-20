@@ -16,14 +16,17 @@
 ---
  
 ## Features
-
+ 
 - **Create Portfolio:** ชื่อที่ต้องการแสดง, What I Enjoy, What I've Tried, What I'm Curious About
-- **Add Portfolio Item:** เพิ่มได้หลายรายการต่อหนึ่ง Portfolio
-  (Title, Type, Date, Role, Skills, Description, Reflection 4 ช่อง, Evidence)
-- **Validation:** ตรวจช่องที่จำเป็น รูปแบบ URL ของ Evidence และรูปแบบวันที่ พร้อมข้อความแจ้งเตือน
-- **Save & Load:** บันทึกลง `localStorage` และข้อมูลยังอยู่หลัง Refresh
-- **Multiple Portfolios:** รองรับหลาย Portfolio โดยข้อมูลไม่ปะปนกัน
-- **Responsive:** ใช้งานได้ทั้ง Desktop และ Mobile (Bootstrap 5.3.3 ผ่าน CDN)
+- **Add Portfolio Item:** เพิ่มได้หลายรายการต่อ Portfolio (Title, Type, Date, Role, Skills, Description, Reflection 4 ช่อง, Evidence URL)
+- **Validation:** ตรวจที่ Frontend และตรวจซ้ำที่ Server ก่อนบันทึก
+- **Server-side Storage:** บันทึก/อ่าน Portfolio ผ่าน `echo.php` เป็นไฟล์ JSON บน EC2 (ข้อมูลอยู่หลัง Restart/Reboot)
+- **Import Portfolio Item:** วาง JSON ใน Textarea (หรือเลือกไฟล์ `.json`) → ตรวจรูปแบบ → เลือก Portfolio ปลายทาง → ตรวจ/แก้ Reflection → Save
+- **ป้องกัน Item ซ้ำ:** Import ID เดิมซ้ำจะไม่สร้างรายการซ้ำโดยไม่ตั้งใจ
+- **Export:** Export Portfolio ของตนเองเป็น `my-portfolio.json`
+- **localStorage:** ใช้เก็บเฉพาะข้อมูลชั่วคราว (Form Draft / Theme) ไม่ใช่แหล่งข้อมูลหลัก
+- **Responsive:** Desktop และ Mobile (Bootstrap 5.3.3 ผ่าน CDN)
+
 
 > สถานะการทำงานแต่ละฟีเจอร์ให้ทีมอัปเดตก่อนส่ง ดูรายละเอียดบั๊กที่รู้จักในหัวข้อ Known Issues
 
