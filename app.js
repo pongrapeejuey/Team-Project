@@ -185,6 +185,32 @@ function nextItemId() {
     return String(max + 1).padStart(3, "0");  
 }
 
+function portfolioSignature(p) {
+    const clean = function (v) { return String(v || "").trim(); };
+    const items = (Array.isArray(p.items) ? p.items : []).map(function (it) {
+        return {
+            title: clean(it.title),
+            type: clean(it.type),
+            date: clean(it.date),
+            role: clean(it.role),
+            skills: clean(it.skills),
+            description: clean(it.description),
+            whatIDid: clean(it.whatIDid),
+            whatILearned: clean(it.whatILearned),
+            challenge: clean(it.challenge),
+            nextStep: clean(it.nextStep),
+            evidence: clean(it.evidence)
+        };
+    });
+    return JSON.stringify({
+        displayName: clean(p.displayName),
+        whatIEnjoy: clean(p.whatIEnjoy),
+        whatIveTried: clean(p.whatIveTried),
+        whatImCurious: clean(p.whatImCurious),
+        items: items
+    });
+}
+
 form.addEventListener("submit", function (event) { 
     event.preventDefault();
 
@@ -379,6 +405,116 @@ if (clearModalEl && clearConfirmBtn) {
         
     });
 }
+
+// import//
+const importInput = document.querySelector("#import-file");
+
+importInput.addEventListener("change", function () {
+    const file = importInput.files[0];
+    if (!file) return;
+
+    const isJson = /\.json$/i.test(file.name) || file.type === "application/json";
+    if (!isJson) {
+        alert("กรุณาเลือกไฟล์ .json เท่านั้น");
+        importInput.value = "";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function () {
+        let data;
+        try {
+            data = JSON.parse(reader.result);
+        } catch (e) {
+            alert("ไฟล์นี้ไม่ใช่ JSON ที่ถูกต้อง");
+            importInput.value = "";
+            return;
+        }
+    const imported = Array.isArray(data) ? data : [data];
+        const validData = imported.every(function (p) {
+            return p && typeof p === "object" && typeof p.displayName === "string" && p.displayName.trim() !== "";
+        });
+
+        if (imported.length === 0 || !validData) {
+            alert("โครงสร้างไฟล์ไม่ถูกต้อง (ต้องมี displayName ในแต่ละ Portfolio)");
+            importInput.value = "";
+            return;
+        }
+    
+    const usedIds = new Set();
+        portfolios.forEach(function (p) {
+            (p.items || []).forEach(function (it) {
+                if (it.id) usedIds.add(String(it.id));
+            });
+        });
+        
+    const existingSigs = new Set(portfolios.map(portfolioSignature));
+        const skipped = [];
+        let addedCount = 0;
+
+        imported.forEach(function (p) {
+            const sig = portfolioSignature(p);
+            if (existingSigs.has(sig)) {
+                skipped.push(p.displayName);
+                return;
+            }
+            existingSigs.add(sig);
+
+            const items = Array.isArray(p.items) ? p.items : [];
+
+            items.forEach(function (it) {
+                const oldId = it.id ? String(it.id) : "";
+
+                if (oldId === "" || usedIds.has(oldId)) {
+                    let max = 0;
+                    usedIds.forEach(function (id) {
+                        const n = parseInt(id, 10);
+                        if (!isNaN(n) && n > max) max = n;
+                    });
+                    it.id = String(max + 1).padStart(3, "0");
+                }
+                usedIds.add(String(it.id));
+            });
+
+            portfolios.push({
+                displayName: p.displayName,
+                whatIEnjoy: p.whatIEnjoy || "",
+                whatIveTried: p.whatIveTried || "",
+                whatImCurious: p.whatImCurious || "",
+                items: items
+            });
+            addedCount++;
+        });
+
+         if (addedCount === 0) {
+            alert("ไฟล์นี้มีข้อมูลซ้ำกับที่มีอยู่แล้วทั้งหมด จึงไม่ได้เพิ่มข้อมูล");
+            importInput.value = "";
+            return;
+        }
+
+        savePortfolios();
+        renderList();
+        renderSelect();
+
+        let msg = "นำเข้าข้อมูลสำเร็จ " + addedCount + " Portfolio";
+        if (skipped.length > 0) {
+            msg += "\nข้าม " + skipped.length + " Portfolio ที่ซ้ำ: " + skipped.join(", ");
+        }
+        alert(msg);
+        importInput.value = "";
+    };
+    reader.onerror = function () {
+        alert("อ่านไฟล์ไม่สำเร็จ");
+        importInput.value = "";
+    };
+
+    reader.readAsText(file);
+});
+
+
+
+
 
 // export //
 function exportPortfolio(portfolio) {
