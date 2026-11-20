@@ -2,6 +2,107 @@
 header('Content-Type: application/json; charset=utf-8');
 
 $file = __DIR__ . '/portfolio.json';
+function validatePortfolio($p) {
+    $required = [
+        'id',
+        'displayName',
+        'whatIEnjoy',
+        'whatIveTried',
+        'whatImCuriousAbout',
+        'items'
+    ];
+
+    foreach ($required as $field) {
+        if (!array_key_exists($field, $p)) {
+            return false;
+        }
+    }
+
+    if (!is_string($p['id']) || trim($p['id']) === '') {
+        return false;
+    }
+
+    if (!is_string($p['displayName']) || trim($p['displayName']) === '') {
+        return false;
+    }
+
+    if (!is_array($p['items'])) {
+        return false;
+    }
+
+    return true;
+}
+
+function validateItem($item) {
+    $required = [
+        'id',
+        'title',
+        'type',
+        'date',
+        'role',
+        'description',
+        'skills',
+        'reflection',
+        'evidence'
+    ];
+
+    foreach ($required as $field) {
+        if (!array_key_exists($field, $item)) {
+            return false;
+        }
+    }
+
+    if (!is_string($item['id']) || trim($item['id']) === '') {
+        return false;
+    }
+
+    if (!is_array($item['skills']) || count($item['skills']) === 0) {
+    return false;
+}
+
+foreach ($item['skills'] as $skill) {
+    if (!is_string($skill) || trim($skill) === '') {
+        return false;
+    }
+}
+
+    $reflectionFields = [
+    'whatIDid',
+    'whatILearned',
+    'challenge',
+    'nextStep'
+];
+
+if (!is_array($item['reflection'])) {
+    return false;
+}
+
+foreach ($reflectionFields as $field) {
+    if (
+        !isset($item['reflection'][$field]) ||
+        !is_string($item['reflection'][$field]) ||
+        trim($item['reflection'][$field]) === ''
+    ) {
+        return false;
+    }
+}
+
+    if (!is_array($item['evidence']) || count($item['evidence']) === 0) {
+    return false;
+}
+
+foreach ($item['evidence'] as $url) {
+    if (
+        !is_string($url) ||
+        !filter_var($url, FILTER_VALIDATE_URL) ||
+        !in_array(parse_url($url, PHP_URL_SCHEME), ['http', 'https'])
+    ) {
+        return false;
+    }
+}
+
+    return true;
+}
 
 if (!file_exists($file)) {
     file_put_contents($file, '[]');
@@ -21,6 +122,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['ok' => false, 'error' => 'Invalid JSON']);
         exit;
     }
+
+    foreach ($data as $portfolio) {
+    if (!is_array($portfolio) || !validatePortfolio($portfolio)) {
+        http_response_code(400);
+        echo json_encode([
+            'ok' => false,
+            'error' => 'Invalid portfolio data'
+        ]);
+        exit;
+    }
+
+    foreach ($portfolio['items'] as $item) {
+        if (!is_array($item) || !validateItem($item)) {
+            http_response_code(400);
+            echo json_encode([
+                'ok' => false,
+                'error' => 'Invalid portfolio item'
+            ]);
+            exit;
+        }
+    }
+}
 
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
