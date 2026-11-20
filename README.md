@@ -30,93 +30,135 @@
 
 > สถานะการทำงานแต่ละฟีเจอร์ให้ทีมอัปเดตก่อนส่ง ดูรายละเอียดบั๊กที่รู้จักในหัวข้อ Known Issues
 
-## วิธีเปิดและทดลองใช้งาน
-
+## การติดตั้งและรันบน AWS EC2
+ 
 ### สิ่งที่ต้องมี
-- Git
-- VS Code พร้อมส่วนขยาย **Live Preview** (หรือ Live Server)
-- Browser ทั่วไป (เช่น Chrome, Edge)
-- ต้องต่ออินเทอร์เน็ต เพราะโหลด Bootstrap จาก CDN
-
-### ขั้นตอน
-1. Clone repository
-   ```bash
-   git clone https://github.com/pongrapeejuey/Team-Project.git
-   cd Team-Project
-   ```
-2. เปิดโฟลเดอร์ `Team-Project` ใน VS Code (File → Open Folder)
-3. คลิกขวาที่ `index.html` → **Show Preview** (Live Preview) หรือ **Open with Live Server**
-4. เปิดหน้าเว็บที่ `http://127.0.0.1:3000/index.html`
-   (พอร์ตอาจต่างกันตามเครื่อง ใช้ URL ที่ VS Code แสดง)
-
-### ลองใช้งานตามลำดับ
-1. กรอกฟอร์ม **สร้าง Portfolio ใหม่** แล้วกดสร้าง (สร้างอย่างน้อย 2 Portfolios)
-2. ในฟอร์ม **เพิ่ม Portfolio Item** เลือก Portfolio แล้วกรอกข้อมูลให้ครบ กดบันทึก (ทำให้ได้อย่างน้อย 2 Items ต่อ Portfolio)
-3. กด **Refresh (F5)** ข้อมูลต้องยังอยู่ครบ
-4. ทดลองกรอกข้อมูลผิด เช่น เว้นช่องว่าง หรือ Evidence ที่ไม่ใช่ URL ต้องมีข้อความแจ้งเตือนและไม่บันทึก
-5. ดูข้อมูลที่บันทึกได้ที่ DevTools (F12) → Application → Local Storage
-
-> **ข้อจำกัดของ localStorage:** ข้อมูลเก็บแยกตาม Browser และ URL
-> เปิดอีก Browser หรืออีกเครื่องจะไม่เห็นข้อมูลเดียวกัน (ใช้ URL เดียวกันตลอด อย่าสลับ `localhost` กับ `127.0.0.1`)
-
-## โครงสร้างโปรเจกต์
-
+- AWS Learner Lab + EC2 (Ubuntu 22.04/24.04)
+- Apache + PHP (`apache2`, `php`, `libapache2-mod-php`)
+### 1) สร้างและตั้งค่า EC2
+1. สร้าง Instance แล้วตั้ง **Security Group** เปิดเฉพาะ Port ที่จำเป็น
+   - `22` (SSH) — จำกัด Source เป็น IP ของทีมถ้าทำได้
+   - `80` (HTTP) — เปิดให้ `0.0.0.0/0`
+   - ไม่เปิด Port อื่น
+2. SSH เข้าเครื่อง แล้วติดตั้ง
+```bash
+sudo apt update
+sudo apt install -y apache2 php libapache2-mod-php git
+sudo systemctl enable apache2     # เปิดเองหลัง Reboot
 ```
-Team-Project/
-├── index.html        หน้าหลัก (ฟอร์มและส่วนแสดงผล)
-├── CSS/style.css     custom CSS
-├── app.js            JavaScript (ฟอร์ม, validation, JSON, localStorage)
-└── README.md
+ 
+### 2) Deploy โค้ด
+```bash
+cd /var/www/html
+sudo rm -f index.html
+sudo git clone https://github.com/pongrapeejuey/Team-Project.git .
 ```
-
-> ข้อกำหนดของรายวิชาระบุ `css/style.css` ถ้าทีมย้ายไฟล์ (เช่น `css/`, `js/`) ให้แก้โครงสร้างด้านบนและ path ใน `index.html` ให้ตรงกัน
-
-## โครงสร้างข้อมูล (JSON)
-
-ใช้ชื่อ Field และชนิดข้อมูลตาม `portfolio-example.json` ของรายวิชา ตัวอย่าง 1 Portfolio Item (ข้อมูลสมมติ)
-
+ 
+### 3) ตั้งโฟลเดอร์เก็บข้อมูล (นอก Web Root)
+```bash
+sudo mkdir -p /var/lib/powerup-data
+echo '[]' | sudo tee /var/lib/powerup-data/portfolio.json
+sudo chown -R www-data:www-data /var/lib/powerup-data
+sudo chmod 750 /var/lib/powerup-data
+```
+`echo.php` อ่าน/เขียนไฟล์ที่ `/var/lib/powerup-data/portfolio.json` เท่านั้น
+ผู้ใช้จึงดาวน์โหลดไฟล์ JSON ตรง ๆ ผ่าน URL ไม่ได้ ต้องผ่าน `echo.php`
+ 
+### 4) ตรวจสอบ
+- เปิด `http://<EC2-PUBLIC-IP>/` จาก Browser/เครื่องอื่น ต้องเห็นหน้าเว็บ
+- `http://<EC2-PUBLIC-IP>/portfolio.json` ต้องได้ 404/403 (ห้ามได้ไฟล์ข้อมูล)
+### อัปเดตโค้ดหลังแก้ไข
+```bash
+cd /var/www/html && sudo git pull
+```
+ 
+### รันในเครื่องตัวเอง (ทดสอบก่อน Deploy)
+```bash
+git clone https://github.com/pongrapeejuey/Team-Project.git
+cd Team-Project
+php -S localhost:8000
+```
+เปิด `http://localhost:8000` (ต้องใช้ PHP เพราะมี `echo.php`; Live Preview/Live Server จะไม่รัน PHP)
+ 
+---
+ 
+## วิธีทดลอง Challenge และ Import/Export Portfolio Item
+ 
+### Challenge ของกลุ่มเรา
+- **ชื่อ / ประเภท:** `<ชื่อ Challenge>` — `discover | mix | levelup`
+- **วิธีเล่น:** `<อธิบายสั้น ๆ 2–3 ขั้นตอน>`
+- **เกณฑ์ทำสำเร็จ:** `<เจ้าของบูธตรวจอย่างไร>`
+- **เวลาโดยประมาณ:** 5–10 นาที
+### ขั้นตอนแลกเปลี่ยน (Host → Tester)
+**Host (เจ้าของบูธ)**
+1. ให้เพื่อนต่างกลุ่มทำ Challenge จนสำเร็จ
+2. สร้าง Portfolio Item JSON ของผู้เข้าร่วม (ชื่อ, วันที่, หลักฐาน URL) แล้วกด **Copy JSON** (หรือดาวน์โหลด `portfolio-item.json`)
+3. ส่งต่อให้ผู้เข้าร่วมด้วย Copy/Paste หรือไฟล์ `.json`
+**Tester (ผู้เข้าร่วม) — ในระบบของกลุ่มตนเอง**
+1. วาง JSON ลงช่อง Textarea แล้วกด **Import** (หรือเลือกไฟล์ `.json`)
+2. ระบบตรวจ JSON/Field/ชนิดข้อมูล และ ID ซ้ำ ถ้าผิดจะแจ้งเตือนและไม่บันทึก
+3. เลือก **Portfolio ปลายทาง**
+4. ตรวจ/แก้ **Reflection ทั้ง 4 ช่อง** ให้ตรงกับสิ่งที่ทำจริง
+5. กด **Save** (บันทึกลง Server) → Refresh หรือเปิดอีก Browser ต้องยังเห็น Item
+6. กด **Export** เพื่อได้ `my-portfolio.json` (เฉพาะ Portfolio ของตนเอง)
+### ตัวอย่าง Portfolio Item JSON (ข้อมูลสมมติ)
 ```json
 {
-  "id": "item001",
-  "title": "My First Website",
-  "type": "Course Assignment",
-  "date": "2026-10-18",
-  "role": "Developer",
-  "description": "Created a personal website",
-  "skills": ["HTML", "CSS"],
+  "schemaVersion": "1.0",
+  "id": "item002",
+  "title": "Spot the Request",
+  "type": "Challenge",
+  "date": "2026-11-24",
+  "role": "Player",
+  "description": "Played challenge G01-C01 from Group 01",
+  "skills": ["DevTools", "HTTP"],
   "reflection": {
-    "whatIDid": "Built the website",
-    "whatILearned": "Responsive design",
-    "challenge": "Mobile layout",
-    "nextStep": "Improve the design"
+    "whatIDid": "Found the GET and POST requests in the Network tab",
+    "whatILearned": "POST data is in the request body, not the URL",
+    "challenge": "Finding the Payload tab",
+    "nextStep": "Try it on my own app"
   },
-  "evidence": ["https://example.com/my-work"]
+  "evidence": ["https://example.com/screenshot-network-tab.png"],
+  "challengeId": "G01-C01",
+  "hostGroup": "G01",
+  "category": "discover"
 }
 ```
-
-ไฟล์ตัวอย่างสำหรับส่งงาน: `sample-portfolio-1.json`, `sample-portfolio-2.json` (ข้อมูลสมมติ ไม่มีข้อมูลส่วนตัว)
-
-## การทดสอบ
-
-ผลทดสอบและหลักฐาน (ภาพ/คลิป) อยู่ใน GitHub Issues
-
-| Issue | หัวข้อทดสอบ |
-|---|---|
-| [#1](https://github.com/pongrapeejuey/Team-Project/issues/1) | Responsive Desktop/Mobile |
-| [#2](https://github.com/pongrapeejuey/Team-Project/issues/2) | Broken links และ relative paths |
-| [#3](https://github.com/pongrapeejuey/Team-Project/issues/3) | Form validation |
-| [#4](https://github.com/pongrapeejuey/Team-Project/issues/4) | JSON และ localStorage |
-
-Checkpoint Tests ที่ต้องสาธิต: กรอกไม่ครบ/URL ผิด, สร้าง 2 Portfolios × 2 Items,
-Save → Refresh → Load, เปิดอีก Browser, ดูบน Mobile
-
+ 
+กฎของข้อมูล: `skills` เป็น `string[]`, `reflection` เป็น object ที่มี `whatIDid`, `whatILearned`, `challenge`, `nextStep`
+และ `evidence` เป็น `string[]` ของ URL อย่างน้อย 1 รายการ (คงโครงสร้างเดิมจาก Checkpoint ไม่เปลี่ยนชื่อ/ชนิด Field)
+ 
+---
+ 
+## ความปลอดภัยเบื้องต้น
+ 
+- ไฟล์ JSON อยู่นอก Web Root และเข้าถึงผ่าน `echo.php` เท่านั้น
+- Server ตรวจข้อมูลซ้ำก่อนบันทึก (ชนิดข้อมูล, Field ที่จำเป็น, รูปแบบ URL/วันที่) และตอบ `400` เมื่อข้อมูลผิด
+- Security Group เปิดเฉพาะ Port 22 และ 80
+- ไม่เก็บ Password / AWS Credentials / Private Key (`.pem`) ใน Repository — ใช้ `.gitignore` (`*.pem`, `.env`, `*.key`)
+  หากเผลอ Commit ความลับ ต้องยกเลิก/เปลี่ยนความลับนั้น ไม่ใช่แค่ลบไฟล์
+- ใช้เฉพาะข้อมูลทดลองที่ไม่ sensitive ไม่มีระบบ Login (การเลือกชื่อ/Profile ไม่ใช่การยืนยันตัวตน)
+---
+ 
+## การทดสอบ (Functional Tests)
+ 
+| การทดสอบ | วิธีทดสอบ | หลักฐาน |
+|---|---|---|
+| Cross-device & Persistence | บันทึกจาก Browser A → เปิดใน Browser B; Restart Apache / Reboot EC2 แล้วข้อมูลยังอยู่ | `<ลิงก์คลิป/Issue>` |
+| Server Validation & File Access | ส่งข้อมูลผิดต้องถูกปฏิเสธ; เปิด `/portfolio.json` ตรง ๆ ต้องไม่ได้ไฟล์ | `<ลิงก์>` |
+| Cross-group Exchange | ทำ Challenge → Copy JSON → Paste/Import → เลือก Portfolio → แก้ Reflection → Save → Refresh | `<ลิงก์>` |
+| Invalid JSON & Duplicate | วาง JSON พัง/Field ผิดชนิด/ID ซ้ำ ต้องแจ้งเตือนและไม่บันทึก | `<ลิงก์>` |
+| Export My Portfolio | ได้ `my-portfolio.json` เฉพาะของตนเอง มี Reflection ครบ 4 ช่อง และ Evidence ≥ 1 URL | `<ลิงก์>` |
+| EC2 & Security Group | แสดงการตั้งค่า Port ที่เปิด | `<ลิงก์>` |
+ 
+ผลทดสอบและหลักฐานเพิ่มเติมอยู่ใน GitHub Issues (Checkpoint: [#1](https://github.com/pongrapeejuey/Team-Project/issues/1)–[#4](https://github.com/pongrapeejuey/Team-Project/issues/4))
+ 
+---
+ 
 ## Known Issues
-
-- [ให้ทีมเติมตามสถานะจริง เช่น ฟอร์มส่วนไหนยังไม่ทำงาน พร้อมลิงก์ issue]
-
+ 
+- `<เติมตามสถานะจริงก่อนส่ง พร้อมลิงก์ Issue>`
 ## ทีมและการทำงานร่วมกัน
-
-ใช้ GitHub Issues ตาม workflow **Issue → Implement → Test → Commit → Close**
-โดยทุกงานมีผู้รับผิดชอบ วิธีทดสอบ และหลักฐาน commit message อ้างเลข issue เช่น `Add form validation (#12)`
-
-
+ 
+Workflow: **Issue → Implement → Test → Commit → Close** ทุกงานมีผู้รับผิดชอบ วิธีทดสอบ และหลักฐาน
+commit message อ้างเลข Issue เช่น `Add server validation (#30)`
