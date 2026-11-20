@@ -1,22 +1,39 @@
 h1 {
     padding: 1px;
-    border-top: 3px solid #bcb9b9;
+    border-top: 3px solid #ff0000;
     text-decoration: solid underline;
-    text-decoration-color: #a5b3c0;
+    text-decoration-color: #ff0000;
     text-decoration-thickness: 3px;
     text-underline-offset: 10px;
 }
 
 body {
     background-color: #FDFDFE;
-    font-family: Serif;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-image: url('../Images/wave-bg.png') ;
+    background-size: cover;
 }
 
 .site-header {
     background-color: #fdfdfd;
    
 }
-#btn-import,
+
+#btn-import {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 16px;
+    margin: 8px;
+    border-radius: 15px;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.2;
+    background-color: #0d6efd;
+    color: #ffffff;
+}
+
 #btn-clear {
     display: inline-flex;
     align-items: center;
@@ -28,11 +45,12 @@ body {
     font-family: inherit;
     font-size: 1rem;
     line-height: 1.2;
-    background-color: #ffffff;
+    background-color: #ff0000;
+    color: #ffffff;
 }
 
 #portfolio-section {
-    background-color: #19abfa;
+    background-color: #0196e6;
     color: #ffffff;
     padding: 5px;
     margin: 5px;
@@ -47,15 +65,45 @@ body {
     border-radius: 18px;
 }
 
+#item-section {
+    background-color: #0196e6;
+    color: #ffffff;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 16px;
+}
+
+#item-form {
+    background-color: #c9e9ff;
+    color: black;
+    padding: 18px;
+    margin: 3px;
+    border-radius: 18px;
+}
+
+fieldset {
+    background-color: #c9e9ff;
+}
+
+legend {
+    font-weight: bold ;
+    color: #0196e6;
+}
+
+#btn-reset {
+    background-color: #ff0000;
+    color: #ffffff;
+}
+
 #portfolio-list-section {
-    background-color: #ff6161;
+    background-color: #ff0000;
     padding: 5px;
     margin: 5px;
     border-radius: 16px;
 }
 
 #portfolio-list {
-    background-color: #FDFDFE;
+    background-color: #ffffff;
     margin: 3px;
     padding: 18px;
     border-radius: 18px;
@@ -134,4 +182,6 @@ body {
 
 .btn-export {
     border-radius: 12px;
+    background-color: #0d6efd;
+    color: #ffffff;
 }
