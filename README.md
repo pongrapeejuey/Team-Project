@@ -1,12 +1,20 @@
-# Learning Portfolio — CS100 POWER UP! (Checkpoint 1)
-
-เว็บแอปสำหรับสร้าง Personal Learning Portfolio และเพิ่มผลงาน/ประสบการณ์การเรียนรู้ได้หลายรายการ
-ทำงานบน Browser ทั้งหมด (HTML, CSS, Bootstrap, JavaScript) และบันทึกข้อมูลด้วย `localStorage`
-โปรเจกต์กลุ่มรายวิชา CS100
-
-- **Repository:** https://github.com/pongrapeejuey/Team-Project
-- **Commit SHA ที่ส่งตรวจ:** `commit af93dc6ca7eefe3ba4e52ac03ecab1e3f756b35b
-
+# Learning Portfolio — CS100 POWER UP! (Final System & Demo)
+ 
+เว็บแอปสำหรับสร้าง Personal Learning Portfolio เพิ่มผลงาน/ประสบการณ์การเรียนรู้ และ **แลกเปลี่ยน Portfolio Item ข้ามกลุ่ม**
+ผ่าน Challenge Booth โดยเก็บข้อมูลที่ฝั่ง Server เป็นไฟล์ JSON บน AWS EC2
+โปรเจกต์กลุ่มรายวิชา CS100 (Submission 2 of 2)
+ 
+| รายการ | ข้อมูล |
+|---|---|
+| **Public URL (EC2)** | `http://<EC2-PUBLIC-IP>/`  ← ใส่ IP ล่าสุดก่อนส่ง/วัน Demo |
+| **Repository** | https://github.com/pongrapeejuey/Team-Project |
+| **Commit SHA ที่ส่งตรวจ** | `<ใส่ SHA เต็มของ commit สุดท้ายก่อนส่ง>` |
+| **Challenge ของกลุ่ม** | `<ชื่อ Challenge>` (challengeId: `<G0X-C01>`) |
+ 
+> Public IP ของ EC2 ใน Learner Lab เปลี่ยนได้เมื่อ Stop/Start เครื่อง ตรวจ URL ใหม่ทุกครั้งและแจ้งตามช่องทางที่รายวิชากำหนด
+ 
+---
+ 
 ## Features
 
 - **Create Portfolio:** ชื่อที่ต้องการแสดง, What I Enjoy, What I've Tried, What I'm Curious About
