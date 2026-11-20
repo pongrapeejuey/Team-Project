@@ -60,19 +60,12 @@ function loadPortfolios() {
         .then(function (data) {
             portfolios = Array.isArray(data) ? data : [];
 
-            
-            if (portfolios.length === 0) {
-                const local = loadFromLocal();
-                if (local.length > 0) {
-                    portfolios = local;
-                    savePortfolios();
-                }
-            }
         })
-        .catch(function () {
-            
-            portfolios = loadFromLocal();
-        })
+        .catch(function (err) {
+         console.error("Server load failed:", err);
+        portfolios = [];
+        alert("ไม่สามารถโหลดข้อมูลจาก Server ได้ กรุณาตรวจสอบการเชื่อมต่อ");
+})
         .then(function () {
             renderList();
             renderSelect();
@@ -87,7 +80,9 @@ function showPortfolio(portfolio) {
     title.textContent = portfolio.displayName;
 
     const body = document.createElement("p");
-    body.textContent ="Enjoy: " + portfolio.whatIEnjoy + "  Tried: "+portfolio.whatIveTried +"  Curious: "+ portfolio.whatImCurious;
+    body.textContent = "Enjoy: " + portfolio.whatIEnjoy +
+    "  Tried: " + portfolio.whatIveTried +
+    "  Curious: " + portfolio.whatImCuriousAbout;
     
     card.appendChild(title);
     card.appendChild(body);
@@ -96,18 +91,21 @@ function showPortfolio(portfolio) {
         const itemEl = document.createElement("p");
         itemEl.className = "small mb-3";
         itemEl.style.whiteSpace = "pre-line";
-        itemEl.textContent = "- " + item.title + " (" + item.type + ", " + item.date + ")"+
-            "\nRole: " + item.role + "\nSkills: " + item.skills +
-            "\nDescription: " + item.description +
-            "\nWhat I did: " + item.whatIDid +
-            "\nWhat I learned: " + item.whatILearned +
-            "\nChallenge: " + item.challenge +
-            "\nNext step: " + item.nextStep +
-            "\nEvidence: ";
-         String(item.evidence || "")
-            .split(/[\s,]+/)
-            .map(function (s) { return s.trim(); })
-            .filter(Boolean)
+       const reflection = item.reflection || {};
+
+    itemEl.textContent = "- " + item.title + " (" + item.type + ", " + item.date + ")" +
+    "\nRole: " + item.role +
+    "\nSkills: " + (Array.isArray(item.skills) ? item.skills.join(", ") : item.skills) +
+    "\nDescription: " + item.description +
+    "\nWhat I did: " + (reflection.whatIDid || "") +
+    "\nWhat I learned: " + (reflection.whatILearned || "") +
+    "\nChallenge: " + (reflection.challenge || "") +
+    "\nNext step: " + (reflection.nextStep || "") +
+    "\nEvidence: ";
+
+         (Array.isArray(item.evidence) ? item.evidence : [item.evidence])
+        .map(function (s) { return String(s || "").trim(); })
+        .filter(Boolean)
             .forEach(function (url, i) {
                 itemEl.appendChild(document.createTextNode(i === 0 ? "\n" : "\n\n"));
                 if (/^https?:\/\//i.test(url)) {
@@ -174,39 +172,68 @@ function validUrl(text) {
     }
 }
 
+function nextPortfolioId() {
+    let max = 0;
+
+    portfolios.forEach(function (p) {
+        const match = String(p.id || "").match(/^p(\d+)$/i);
+
+        if (match) {
+            const n = parseInt(match[1], 10);
+            if (n > max) max = n;
+        }
+    });
+
+    return "p" + String(max + 1).padStart(3, "0");
+}
+
 function nextItemId() {
     let max = 0;
+
     portfolios.forEach(function (p) {
         (p.items || []).forEach(function (it) {
-            const n = parseInt(it.id, 10);
-            if (!isNaN(n) && n > max) max = n;
+            const match = String(it.id || "").match(/^item(\d+)$/i);
+
+            if (match) {
+                const n = parseInt(match[1], 10);
+                if (n > max) max = n;
+            }
         });
     });
-    return String(max + 1).padStart(3, "0");  
+
+    return "item" + String(max + 1).padStart(3, "0");
 }
 
 function portfolioSignature(p) {
-    const clean = function (v) { return String(v || "").trim(); };
+   const clean = function (v) {
+    return String(v || "").trim();
+};
+
     const items = (Array.isArray(p.items) ? p.items : []).map(function (it) {
+        const reflection = it.reflection || {};
+
         return {
             title: clean(it.title),
             type: clean(it.type),
             date: clean(it.date),
             role: clean(it.role),
-            skills: clean(it.skills),
             description: clean(it.description),
-            whatIDid: clean(it.whatIDid),
-            whatILearned: clean(it.whatILearned),
-            challenge: clean(it.challenge),
-            nextStep: clean(it.nextStep),
-            evidence: clean(it.evidence)
+            skills: Array.isArray(it.skills) ? it.skills.map(clean) : [clean(it.skills)],
+            reflection: {
+                whatIDid: clean(reflection.whatIDid || it.whatIDid),
+                whatILearned: clean(reflection.whatILearned || it.whatILearned),
+                challenge: clean(reflection.challenge || it.challenge),
+                nextStep: clean(reflection.nextStep || it.nextStep)
+            },
+            evidence: Array.isArray(it.evidence) ? it.evidence.map(clean) : [clean(it.evidence)]
         };
     });
+
     return JSON.stringify({
         displayName: clean(p.displayName),
         whatIEnjoy: clean(p.whatIEnjoy),
         whatIveTried: clean(p.whatIveTried),
-        whatImCurious: clean(p.whatImCurious),
+        whatImCuriousAbout: clean(p.whatImCuriousAbout || p.whatImCurious),
         items: items
     });
 }
@@ -246,12 +273,13 @@ form.addEventListener("submit", function (event) {
     errorCurious.textContent = '';
 
     const portfolio = {
-        displayName: name ,
-        whatIEnjoy: enjoy ,
-        whatIveTried: tried ,
-        whatImCurious: curious,
-        items: []
-    }
+    id: nextPortfolioId(),
+    displayName: name,
+    whatIEnjoy: enjoy,
+    whatIveTried: tried,
+    whatImCuriousAbout: curious,
+    items: []
+    };
 
     portfolios.push(portfolio);
     showPortfolio(portfolio);
@@ -355,20 +383,24 @@ itemForm.addEventListener("submit", function (event){
     errorNextStep.textContent = '';
     errorEvidence.textContent = '';
 
-    const item = {
-        id: nextItemId(),
-        title: title,
-        type: type,
-        date: date,
-        role: role,
-        skills: skills,
-        description: description,
-        whatIDid:whatIDid,
-        whatILearned:whatILearned,
-        challenge:challenge,
-        nextStep:nextStep,
-        evidence: evidenceList.join("\n")
-    };
+   const item = {
+    id: nextItemId(),
+    title: title,
+    type: type,
+    date: date,
+    role: role,
+    description: description,
+    skills: skills.split(",").map(function (s) {
+        return s.trim();
+    }).filter(Boolean),
+    reflection: {
+        whatIDid: whatIDid,
+        whatILearned: whatILearned,
+        challenge: challenge,
+        nextStep: nextStep
+    },
+    evidence: evidenceList
+};
     if (!Array.isArray(portfolios[index].items)) {
         portfolios[index].items = [];
     }
