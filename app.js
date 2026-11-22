@@ -545,7 +545,7 @@ importInput.addEventListener("change", function () {
                 displayName: p.displayName,
                 whatIEnjoy: p.whatIEnjoy || "",
                 whatIveTried: p.whatIveTried || "",
-                whatImCurious: p.whatImCurious || "",
+                whatImCuriousAbout: p.whatImCuriousAbout || p.whatImCurious || "",
                 items: items
             });
             addedCount++;
@@ -577,22 +577,59 @@ importInput.addEventListener("change", function () {
 });
 
 
+function uploadImage(src) {
+     if (!/^data:image\//.test(src)) return Promise.resolve(src);
 
+    return fetch("upload.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: src })
+    })
+    .then(function (res) {
+        if (!res.ok) throw new Error("Upload failed");
+        return res.json();
+    })
+    .then(function (data) {
+        return data.url;
+    });
+}
 
-
-// export //
-function exportPortfolio(portfolio) {
-    const data = JSON.stringify([portfolio], null, 2);
-    const blob = new Blob([data], { type: "application/json" });
+function downloadJson(data, name) {
+    const json = JSON.stringify([data], null, 2);
+    const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "portfolio-" + portfolio.displayName.replace(/[\\/:*?"<>|\s]+/g, "_") + ".json";
+    a.download = "portfolio-" + name.replace(/[\\/:*?"<>|\s]+/g, "_") + ".json";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
+// export //
+function exportPortfolio(portfolio) {
+    const copy = JSON.parse(JSON.stringify(portfolio));
+    const uploads = [];
+
+    (copy.items || []).forEach(function (item) {
+        if (!Array.isArray(item.images)) return;
+        item.images.forEach(function (src, i) {
+            uploads.push(uploadImage(src).then(function (url) {
+                item.images[i] = url;
+            }));
+        });
+    });
+
+    Promise.all(uploads)
+        .then(function () {
+            downloadJson(copy, portfolio.displayName);       
+        })
+        .catch(function (err) {
+            console.warn("Upload failed, exporting with embedded images:", err);
+            downloadJson(portfolio, portfolio.displayName);  
+        });
+    }
 
 function deletePortfolio(portfolio) {
     const index = portfolios.indexOf(portfolio);
