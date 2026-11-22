@@ -363,9 +363,6 @@ itemForm.addEventListener("submit", function (event){
 
     let valid = true;
 
-    if (index === ""){
-        errorIndex.textContent = "Please select a portfolio.";
-        valid = false ;}
     if (title === ""){
         errorTitle.textContent = "Please enter your data.";
         valid = false ;}
@@ -444,10 +441,14 @@ itemForm.addEventListener("submit", function (event){
     evidence: evidenceList,
     images: pendingImages.slice()
 };
-    if (!Array.isArray(portfolios[index].items)) {
-        portfolios[index].items = [];
-    }
-    portfolios[index].items.push(item);                              
+    if (index === "" || !portfolios[index]) {
+        portfolios.push(item); 
+    } else {
+        if (!Array.isArray(portfolios[index].items)) {
+            portfolios[index].items = [];
+        }
+    portfolios[index].items.push(item);
+}                              
     savePortfolios();   
     renderList();                                                     
     itemForm.reset(); 
