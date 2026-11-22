@@ -63,13 +63,28 @@ function loadPortfolios() {
         })
         .catch(function (err) {
          console.error("Server load failed:", err);
-        portfolios = [];
+        portfolios = loadFromLocal();
         alert("ไม่สามารถโหลดข้อมูลจาก Server ได้ กรุณาตรวจสอบการเชื่อมต่อ");
 })
         .then(function () {
             renderList();
             renderSelect();
         });
+}
+
+function openImageInNewTab(src, title) {
+    const w = window.open("", "_blank");
+    if (!w) return;
+
+    w.document.title = title || "Image";
+    w.document.body.style.cssText =
+        "margin:0;background:#111;display:flex;justify-content:center;align-items:center;min-height:100vh;";
+
+    const img = w.document.createElement("img");
+    img.src = src;
+    img.alt = title || "";
+    img.style.cssText = "max-width:100%;max-height:100vh;";
+    w.document.body.appendChild(img);
 }
 
 function showPortfolio(portfolio) {
@@ -119,6 +134,22 @@ function showPortfolio(portfolio) {
         itemEl.appendChild(document.createTextNode(url));
         }});
         itemsBox.appendChild(itemEl);
+
+        if (Array.isArray(item.images) && item.images.length > 0) {
+            const gallery = document.createElement("div");
+            gallery.className = "d-flex flex-wrap gap-2 mb-3";
+            item.images.forEach(function (src) {
+                const img = document.createElement("img");
+                img.src = src;
+                img.alt = item.title;
+                img.style.cssText = "width:100px;height:100px;object-fit:cover;border-radius:6px;cursor:pointer;";
+                img.addEventListener("click", function () {
+                    openImageInNewTab(src, item.title);
+                });
+                gallery.appendChild(img);
+            });
+            itemsBox.appendChild(gallery);
+        }
     });
     card.appendChild(itemsBox);
 
@@ -399,7 +430,8 @@ itemForm.addEventListener("submit", function (event){
         challenge: challenge,
         nextStep: nextStep
     },
-    evidence: evidenceList
+    evidence: evidenceList,
+    images: pendingImages.slice()
 };
     if (!Array.isArray(portfolios[index].items)) {
         portfolios[index].items = [];
@@ -575,3 +607,101 @@ function deletePortfolio(portfolio) {
     renderList();
     renderSelect();
 }
+
+const imageInput = document.querySelector("#evidence-images");
+const imagePreview = document.querySelector("#image-preview");
+let pendingImages = [];
+let pendingNames = [];
+
+function readAndResizeImage(file, maxSize = 800, quality = 0.7) {
+    return new Promise(function (resolve, reject) {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = function () {
+            const img = new Image();
+            img.onerror = reject;
+            img.onload = function () {
+                const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+                const canvas = document.createElement("canvas");
+                canvas.width = Math.round(img.width * scale);
+                canvas.height = Math.round(img.height * scale);
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                resolve(canvas.toDataURL("image/jpeg", quality));
+            };
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function renderImagePreview() {
+    imagePreview.innerHTML = "";
+    pendingImages.forEach(function (src, i) {
+        const wrap = document.createElement("div");
+        wrap.className = "position-relative";
+        wrap.style.cssText = "width:100px;height:100px;";
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "evidence " + (i + 1);
+        img.style.cssText = "width:100px;height:100px;object-fit:cover;border-radius:6px;";
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "btn-close position-absolute top-0 end-0 m-1 bg-white rounded-circle p-1";
+        removeBtn.setAttribute("aria-label", "ลบรูปนี้");
+        removeBtn.addEventListener("click", function () {
+            pendingImages.splice(i, 1);   
+            pendingNames.splice(i, 1);
+            renderImagePreview(); 
+        });
+        
+        wrap.appendChild(img);
+        wrap.appendChild(removeBtn);
+        imagePreview.appendChild(wrap);
+
+    });
+}
+
+imageInput.addEventListener("change", function () {
+    const files = Array.from(imageInput.files);
+    const newFiles = [];
+    let duplicateCount = 0;
+
+    files.forEach(function (f) {
+        const isDuplicate =
+            pendingNames.includes(f.name) ||
+            newFiles.some(function (n) { return n.name === f.name; });
+
+        if (isDuplicate) {
+            duplicateCount++;
+        } else {
+            newFiles.push(f);
+        }
+    });
+
+    Promise.all(newFiles.map(function (f) { return readAndResizeImage(f); }))
+        .then(function (results) {
+            results.forEach(function (src, i) {
+                pendingImages.push(src);
+                pendingNames.push(newFiles[i].name);
+            });
+
+            renderImagePreview();
+            imageInput.value = "";
+
+            if (duplicateCount > 0) {
+                alert("มีไฟล์ชื่อซ้ำ " + duplicateCount + " ไฟล์ ระบบไม่ได้เพิ่มให้");
+            }
+        })
+        .catch(function () {
+            alert("อ่านไฟล์รูปไม่สำเร็จ");
+        });
+});
+
+itemForm.addEventListener("reset", function () {
+    pendingImages = [];
+    pendingNames = [];   
+    renderImagePreview();
+});
