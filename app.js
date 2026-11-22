@@ -441,17 +441,27 @@ itemForm.addEventListener("submit", function (event){
     evidence: evidenceList,
     images: pendingImages.slice()
 };
-    if (index === "" || !portfolios[index]) {
-        portfolios.push(item); 
-    } else {
-        if (!Array.isArray(portfolios[index].items)) {
-            portfolios[index].items = [];
+    Promise.all(item.images.map(function (src) {
+        return uploadImage(src).catch(function (err) {
+            console.warn("Upload failed, keeping embedded image:", err);
+            return src;
+        });
+    })).then(function (urls) {
+        item.images = urls;
+
+        if (index === "" || !portfolios[index]) {
+            portfolios.push(item);
+        } else {
+            if (!Array.isArray(portfolios[index].items)) {
+                portfolios[index].items = [];
+            }
+            portfolios[index].items.push(item);
         }
-    portfolios[index].items.push(item);
-}                              
-    savePortfolios();   
-    renderList();                                                     
-    itemForm.reset(); 
+        savePortfolios();
+        renderList();
+    });
+
+    itemForm.reset();
 });
 
 loadPortfolios();
