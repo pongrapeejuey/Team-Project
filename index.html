@@ -17,8 +17,8 @@
             <div class="d-flex gap-2">
                 <label id="btn-import" for="import-file" class="btn btn-outline-primary btn-sm mb-0">IMPORT FILE</label>
                 <input id="import-file" type="file" accept=".json,application/json" class="visually-hidden">
-                                <button id="btn-clear" type="button" class="btn btn-outline-danger btn-sm"
-                        data-bs-toggle="modal" data-bs-target="#clearModal">ล้างข้อมูลทั้งหมด</button>
+                <button id="btn-clear" type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#clearModal">ล้างข้อมูลทั้งหมด</button>
             </div>
         </div>
     </header>
@@ -45,25 +45,29 @@
                             <div class="mb-3">
                                 <label for="displayName" class="form-label">ชื่อที่ต้องการแสดง <span
                                         class="text-danger">*</span></label>
-                                <input id="displayName" name="displayName" type="text" class="form-control" placeholder="Yourname">
+                                <input id="displayName" name="displayName" type="text" class="form-control"
+                                    placeholder="Yourname">
                                 <div class="field-error text-danger small mt-1" id="error-displayName"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="enjoy" class="form-label">What I Enjoy (ชอบทำอะไร) <span
                                         class="text-danger">*</span></label>
-                                <textarea id="enjoy" name="enjoy" rows="2" class="form-control" placeholder="Coding"></textarea>
+                                <textarea id="enjoy" name="enjoy" rows="2" class="form-control"
+                                    placeholder="Coding"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-enjoy"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="tried" class="form-label">What I've Tried (ลองทำอะไรมาแล้วบ้าง) <span
                                         class="text-danger">*</span></label>
-                                <textarea id="tried" name="tried" rows="2" class="form-control" placeholder="CS100"></textarea>
+                                <textarea id="tried" name="tried" rows="2" class="form-control"
+                                    placeholder="CS100"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-tried"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="curious" class="form-label">What I'm Curious About (สนใจ/อยากรู้อะไรเพิ่ม)
                                     <span class="text-danger">*</span></label>
-                                <textarea id="curious" name="curious" rows="2" class="form-control" placeholder="JavaScript"></textarea>
+                                <textarea id="curious" name="curious" rows="2" class="form-control"
+                                    placeholder="JavaScript"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-curious"></div>
                             </div>
                             <button id="createport" type="submit" class="btn btn-primary w-100">สร้าง Portfolio</button>
@@ -90,7 +94,8 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="title" class="form-label">Title <span
                                             class="text-danger">*</span></label>
-                                    <input id="title" name="title" type="text" class="form-control" placeholder="My First Website">
+                                    <input id="title" name="title" type="text" class="form-control"
+                                        placeholder="My First Website">
                                     <div class="field-error text-danger small mt-1" id="error-title"></div>
                                 </div>
                                 <div class="col-md-3 mb-3">
@@ -123,14 +128,16 @@
                             <div class="mb-3">
                                 <label for="skills" class="form-label">Skills <span class="text-danger">*</span>
                                     (คั่นด้วยเครื่องหมายจุลภาค เช่น HTML, CSS)</label>
-                                <input id="skills" name="skills" type="text" class="form-control" placeholder=" [HTML,CSS] ">
+                                <input id="skills" name="skills" type="text" class="form-control"
+                                    placeholder=" [HTML,CSS] ">
                                 <div class="field-error text-danger small mt-1" id="error-skills"></div>
                             </div>
 
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description <span
                                         class="text-danger">*</span></label>
-                                <textarea id="description" name="description" rows="3" class="form-control" placeholder="Created a personal website"></textarea>
+                                <textarea id="description" name="description" rows="3" class="form-control"
+                                    placeholder="Created a personal website"></textarea>
                                 <div class="field-error text-danger small mt-1" id="error-description"></div>
                             </div>
 
@@ -139,36 +146,59 @@
                                 <div class="mb-3">
                                     <label for="whatIDid" class="form-label">What I did <span
                                             class="text-danger">*</span></label>
-                                    <textarea id="whatIDid" name="whatIDid" rows="2" class="form-control" placeholder="Built the website"></textarea>
+                                    <textarea id="whatIDid" name="whatIDid" rows="2" class="form-control"
+                                        placeholder="Built the website"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-whatIDid"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="whatILearned" class="form-label">What I learned <span
                                             class="text-danger">*</span></label>
-                                    <textarea id="whatILearned" name="whatILearned" rows="2"
-                                        class="form-control" placeholder="Responsive design"></textarea>
+                                    <textarea id="whatILearned" name="whatILearned" rows="2" class="form-control"
+                                        placeholder="Responsive design"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-whatILearned"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="challenge" class="form-label">Challenge <span
                                             class="text-danger">*</span></label>
-                                    <textarea id="challenge" name="challenge" rows="2" class="form-control" placeholder="Mobile layout"></textarea>
+                                    <textarea id="challenge" name="challenge" rows="2" class="form-control"
+                                        placeholder="Mobile layout"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-challenge"></div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="nextStep" class="form-label">Next step <span
                                             class="text-danger">*</span></label>
-                                    <textarea id="nextStep" name="nextStep" rows="2" class="form-control" placeholder="Improve the design"></textarea>
+                                    <textarea id="nextStep" name="nextStep" rows="2" class="form-control"
+                                        placeholder="Improve the design"></textarea>
                                     <div class="field-error text-danger small mt-1" id="error-nextStep"></div>
                                 </div>
                             </fieldset>
 
                             <div class="mb-4">
-                                <label for="evidence" class="form-label">Evidence <span class="text-danger">*</span>
-                                    (ลิงก์ละ 1 บรรทัด ขึ้นต้นด้วย http:// หรือ https://)</label>
-                                <textarea id="evidence" name="evidence" rows="3" class="form-control" placeholder="https://example.com/my-work"></textarea>
+                                <label for="evidence" class="form-label">
+                                    Evidence <span class="text-danger">*</span>
+                                </label>
+
+                                <!-- URL Evidence -->
+                                <textarea id="evidence" name="evidence" rows="3" class="form-control"
+                                    placeholder="ใส่ลิงก์หลักฐาน ลิงก์ละ 1 บรรทัด (https://...)"></textarea>
+
+                                <!-- Image Upload -->
+                                <div class="mt-3">
+                                    <label for="evidence-images" class="btn btn-outline-primary">
+                                        Upload Images
+                                    </label>
+
+                                    <input type="file" id="evidence-images" name="evidence-images"
+                                        accept="image/png, image/jpeg, image/webp" multiple class="visually-hidden">
+                                </div>
+
+                                <!-- Image Preview Area -->
+                                <div id="image-preview" class="d-flex flex-wrap gap-2 mt-3">
+                                </div>
+
                                 <div class="field-error text-danger small mt-1" id="error-evidence"></div>
                             </div>
+
 
                             <div class="d-flex gap-2">
                                 <button type="submit" class="btn btn-primary flex-grow-1">บันทึก Item</button>
@@ -182,23 +212,24 @@
 
         </div>
     </main>
-        <div class="modal fade" id="clearModal" tabindex="-1" aria-labelledby="clearModalLabel" aria-hidden="true">
+    <div class="modal fade" id="clearModal" tabindex="-1" aria-labelledby="clearModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content clear-modal">
                 <div class="modal-body text-center p-4">
                     <div class="clear-icon mx-auto mb-3" aria-hidden="true">
                         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>
-                            <line x1="12" y1="9" x2="12" y2="13"/>
-                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
                         </svg>
                     </div>
                     <h2 id="clearModalLabel" class="h4 mb-2">แน่ใจหรือไม่ว่าจะล้างข้อมูล?</h2>
                     <p id="clearModalText" class="text-muted mb-4"></p>
                     <div class="d-flex gap-2 justify-content-center">
                         <button type="button" class="btn btn-light clear-btn" data-bs-dismiss="modal">ยกเลิก</button>
-                        <button type="button" id="btn-clear-confirm" class="btn btn-danger clear-btn">ใช่ ล้างเลย</button>
+                        <button type="button" id="btn-clear-confirm" class="btn btn-danger clear-btn">ใช่
+                            ล้างเลย</button>
                     </div>
                 </div>
             </div>
