@@ -92,7 +92,92 @@ function openImageInNewTab(src, title) {
 function isStandaloneItem(p) {
     return !!p && !Array.isArray(p.items) && typeof p.title === "string";
 }
+const REFLECTION_FIELDS = [
+    ["whatIDid", "What I did"],
+    ["whatILearned", "What I learned"],
+    ["challenge", "Challenge"],
+    ["nextStep", "Next step"]
+];
 
+function showReflectionEditor(wrapper, item) {
+    const reflection = item.reflection || {};
+    const editForm = document.createElement("div");
+    editForm.className = "border rounded p-3 mb-3 bg-light";
+
+    const heading = document.createElement("div");
+    heading.className = "fw-semibold small mb-2";
+    heading.textContent = "Edit Reflection: " + item.title;
+    editForm.appendChild(heading);
+
+    const inputs = {};
+    REFLECTION_FIELDS.forEach(function (f) {
+        const group = document.createElement("div");
+        group.className = "mb-2";
+
+        const label = document.createElement("div");
+        label.className = "form-label small mb-1";
+        label.textContent = f[1];
+
+        const ta = document.createElement("textarea");
+        ta.className = "form-control";
+        ta.rows = 2;
+        ta.value = reflection[f[0]] || "";
+        ta.setAttribute("aria-label", f[1]);
+
+        const err = document.createElement("div");
+        err.className = "text-danger small";
+
+        group.appendChild(label);
+        group.appendChild(ta);
+        group.appendChild(err);
+        editForm.appendChild(group);
+        inputs[f[0]] = { ta: ta, err: err };
+    });
+
+    const btnRow = document.createElement("div");
+    btnRow.className = "d-flex gap-2";
+
+    const saveBtn = document.createElement("button");
+    saveBtn.type = "button";
+    saveBtn.className = "btn btn-primary btn-sm";
+    saveBtn.textContent = "Save";
+    saveBtn.addEventListener("click", function () {
+        let valid = true;
+        REFLECTION_FIELDS.forEach(function (f) {
+            if (inputs[f[0]].ta.value.trim() === "") {
+                inputs[f[0]].err.textContent = "Please enter your data.";
+                valid = false;
+            } else {
+                inputs[f[0]].err.textContent = "";
+            }
+        });
+        if (!valid) {
+            return;
+        }
+        item.reflection = {
+            whatIDid: inputs.whatIDid.ta.value.trim(),
+            whatILearned: inputs.whatILearned.ta.value.trim(),
+            challenge: inputs.challenge.ta.value.trim(),
+            nextStep: inputs.nextStep.ta.value.trim()
+        };
+        savePortfolios();
+        renderList();
+    });
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.type = "button";
+    cancelBtn.className = "btn btn-outline-secondary btn-sm";
+    cancelBtn.textContent = "Cancel";
+    cancelBtn.addEventListener("click", function () {
+        renderList();
+    });
+
+    btnRow.appendChild(saveBtn);
+    btnRow.appendChild(cancelBtn);
+    editForm.appendChild(btnRow);
+
+    wrapper.replaceChildren(editForm);
+}
 function showPortfolio(portfolio) {
     const standalone = isStandaloneItem(portfolio);
     const itemsToShow = standalone ? [portfolio] : (portfolio.items || []);
@@ -113,6 +198,7 @@ function showPortfolio(portfolio) {
     }
     const itemsBox = document.createElement("div");
     itemsToShow.forEach(function (item) {
+        const itemWrap = document.createElement("div");
         const itemEl = document.createElement("p");
         itemEl.className = "small mb-3";
         itemEl.style.whiteSpace = "pre-line";
@@ -143,7 +229,7 @@ function showPortfolio(portfolio) {
         } else {
         itemEl.appendChild(document.createTextNode(url));
         }});
-        itemsBox.appendChild(itemEl);
+                itemWrap.appendChild(itemEl);
 
         if (Array.isArray(item.images) && item.images.length > 0) {
             const gallery = document.createElement("div");
@@ -158,8 +244,19 @@ function showPortfolio(portfolio) {
                 });
                 gallery.appendChild(img);
             });
-            itemsBox.appendChild(gallery);
+                       itemWrap.appendChild(gallery);
         }
+
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "btn btn-outline-secondary btn-sm mb-3";
+        editBtn.textContent = "Edit Reflection";
+        editBtn.addEventListener("click", function () {
+            showReflectionEditor(itemWrap, item);
+        });
+        itemWrap.appendChild(editBtn);
+
+        itemsBox.appendChild(itemWrap);
     });
     card.appendChild(itemsBox);
 
