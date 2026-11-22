@@ -58,7 +58,9 @@ function loadPortfolios() {
             return res.json();
         })
         .then(function (data) {
-            portfolios = Array.isArray(data) ? data : [];
+            const serverData = Array.isArray(data) ? data : [];
+            const localData = loadFromLocal();
+            portfolios = (serverData.length === 0 && localData.length > 0) ? localData : serverData;
 
         })
         .catch(function (err) {
@@ -87,7 +89,13 @@ function openImageInNewTab(src, title) {
     w.document.body.appendChild(img);
 }
 
+function isStandaloneItem(p) {
+    return !!p && !Array.isArray(p.items) && typeof p.title === "string";
+}
+
 function showPortfolio(portfolio) {
+    const standalone = isStandaloneItem(portfolio);
+    const itemsToShow = standalone ? [portfolio] : (portfolio.items || []);
     const card = document.createElement("div");
     card.className = "card p-3 mb-2"
 
@@ -99,10 +107,12 @@ function showPortfolio(portfolio) {
     "  Tried: " + portfolio.whatIveTried +
     "  Curious: " + portfolio.whatImCuriousAbout;
     
-    card.appendChild(title);
-    card.appendChild(body);
+    if (!standalone) {
+        card.appendChild(title);
+        card.appendChild(body);
+    }
     const itemsBox = document.createElement("div");
-    (portfolio.items || []).forEach(function (item) {
+    itemsToShow.forEach(function (item) {
         const itemEl = document.createElement("p");
         itemEl.className = "small mb-3";
         itemEl.style.whiteSpace = "pre-line";
@@ -187,6 +197,7 @@ function renderList() {
 function renderSelect() {
     select.innerHTML = '<option value="">-- Select portfolio --</option>';
     portfolios.forEach(function (p, i) {
+        if (isStandaloneItem(p)) return;
         const opt = document.createElement("option");
         opt.value = i;
         opt.textContent = p.displayName;
@@ -222,7 +233,7 @@ function nextItemId() {
     let max = 0;
 
     portfolios.forEach(function (p) {
-        (p.items || []).forEach(function (it) {
+        (isStandaloneItem(p) ? [p] : (p.items || [])).forEach(function (it) {
             const match = String(it.id || "").match(/^item(\d+)$/i);
 
             if (match) {
@@ -473,6 +484,25 @@ if (clearModalEl && clearConfirmBtn) {
 // import//
 const importInput = document.querySelector("#import-file");
 
+function extractItems(data) {
+    const result = [];
+
+    function visit(node) {
+        if (Array.isArray(node)) {
+            node.forEach(visit);
+        } else if (node && typeof node === "object") {
+            if (Array.isArray(node.items)) {
+                node.items.forEach(visit);
+            } else {
+                result.push(node);
+            }
+        }
+    }
+
+    visit(data);
+    return result;
+}
+
 importInput.addEventListener("change", function () {
     const file = importInput.files[0];
     if (!file) return;
@@ -495,64 +525,77 @@ importInput.addEventListener("change", function () {
             importInput.value = "";
             return;
         }
-    const imported = Array.isArray(data) ? data : [data];
-        const validData = imported.every(function (p) {
-            return p && typeof p === "object" && typeof p.displayName === "string" && p.displayName.trim() !== "";
-        });
+    const imported = extractItems(data);
+    const validData = imported.every(function (it) {
+        return typeof it.title === "string" && it.title.trim() !== "";
+    });
 
-        if (imported.length === 0 || !validData) {
-            alert("โครงสร้างไฟล์ไม่ถูกต้อง (ต้องมี displayName ในแต่ละ Portfolio)");
-            importInput.value = "";
-            return;
-        }
-    
+    if (imported.length === 0 || !validData) {
+        alert("โครงสร้างไฟล์ไม่ถูกต้อง (ต้องมี title ในแต่ละ Item)");
+        importInput.value = "";
+        return;
+    }
+
+    const target = portfolios[select.value];
+    if (target && !Array.isArray(target.items)) {
+        target.items = [];
+    }
+
+
     const usedIds = new Set();
         portfolios.forEach(function (p) {
-            (p.items || []).forEach(function (it) {
+            (isStandaloneItem(p) ? [p] : (p.items || [])).forEach(function (it) {
                 if (it.id) usedIds.add(String(it.id));
             });
         });
-        
-    const existingSigs = new Set(portfolios.map(portfolioSignature));
+    const existingItems = target ? target.items : portfolios.filter(isStandaloneItem);
+    const existingSigs = new Set(existingItems.map(function (it) {
+            return portfolioSignature({ items: [it] });
+        }));
         const skipped = [];
         let addedCount = 0;
 
-        imported.forEach(function (p) {
-            const sig = portfolioSignature(p);
+        imported.forEach(function (it) {
+            const sig = portfolioSignature({ items: [it] });
             if (existingSigs.has(sig)) {
-                skipped.push(p.displayName);
+                skipped.push(it.title);
                 return;
             }
             existingSigs.add(sig);
 
-            const items = Array.isArray(p.items) ? p.items : [];
-
-            items.forEach(function (it) {
-                const oldId = it.id ? String(it.id) : "";
-
-                if (oldId === "" || usedIds.has(oldId)) {
-                    let max = 0;
-                    usedIds.forEach(function (id) {
-                        const n = parseInt(id, 10);
-                        if (!isNaN(n) && n > max) max = n;
-                    });
-                    it.id = String(max + 1).padStart(3, "0");
+            const reflection = it.reflection || {};
+            let id = it.id ? String(it.id) : "";
+            if (id === "" || usedIds.has(id)) {
+                id = nextItemId();
+                while (usedIds.has(id)) {
+                    const n = parseInt(id.replace(/^item/i, ""), 10) + 1;
+                    id = "item" + String(n).padStart(3, "0");
                 }
-                usedIds.add(String(it.id));
-            });
+            }
+            usedIds.add(id);
 
-            portfolios.push({
-                displayName: p.displayName,
-                whatIEnjoy: p.whatIEnjoy || "",
-                whatIveTried: p.whatIveTried || "",
-                whatImCuriousAbout: p.whatImCuriousAbout || p.whatImCurious || "",
-                items: items
+            (target ? target.items : portfolios).push({
+                id: id,
+                title: it.title,
+                type: it.type || "",
+                date: it.date || "",
+                role: it.role || "",
+                description: it.description || "",
+                skills: Array.isArray(it.skills) ? it.skills : (it.skills ? [it.skills] : []),
+                reflection: {
+                    whatIDid: reflection.whatIDid || it.whatIDid || "",
+                    whatILearned: reflection.whatILearned || it.whatILearned || "",
+                    challenge: reflection.challenge || it.challenge || "",
+                    nextStep: reflection.nextStep || it.nextStep || ""
+                },
+                evidence: Array.isArray(it.evidence) ? it.evidence : (it.evidence ? [it.evidence] : []),
+                images: Array.isArray(it.images) ? it.images : []
             });
             addedCount++;
         });
 
-         if (addedCount === 0) {
-            alert("ไฟล์นี้มีข้อมูลซ้ำกับที่มีอยู่แล้วทั้งหมด จึงไม่ได้เพิ่มข้อมูล");
+        if (addedCount === 0) {
+            alert("ไฟล์นี้มี Item ซ้ำกับที่มีอยู่แล้วทั้งหมด จึงไม่ได้เพิ่มข้อมูล");
             importInput.value = "";
             return;
         }
@@ -561,9 +604,9 @@ importInput.addEventListener("change", function () {
         renderList();
         renderSelect();
 
-        let msg = "นำเข้าข้อมูลสำเร็จ " + addedCount + " Portfolio";
+        let msg = "นำเข้า Item สำเร็จ " + addedCount + " รายการ";
         if (skipped.length > 0) {
-            msg += "\nข้าม " + skipped.length + " Portfolio ที่ซ้ำ: " + skipped.join(", ");
+            msg += "\nข้าม " + skipped.length + " Item ที่ซ้ำ: " + skipped.join(", ");
         }
         alert(msg);
         importInput.value = "";
@@ -612,7 +655,7 @@ function exportPortfolio(portfolio) {
     const copy = JSON.parse(JSON.stringify(portfolio));
     const uploads = [];
 
-    (copy.items || []).forEach(function (item) {
+    (copy.items || [copy]).forEach(function (item) {
         if (!Array.isArray(item.images)) return;
         item.images.forEach(function (src, i) {
             uploads.push(uploadImage(src).then(function (url) {
@@ -623,11 +666,11 @@ function exportPortfolio(portfolio) {
 
     Promise.all(uploads)
         .then(function () {
-            downloadJson(copy, portfolio.displayName);       
+            downloadJson(copy, (portfolio.displayName || portfolio.title));       
         })
         .catch(function (err) {
             console.warn("Upload failed, exporting with embedded images:", err);
-            downloadJson(portfolio, portfolio.displayName);  
+            downloadJson(portfolio, (portfolio.displayName || portfolio.title)); 
         });
     }
 
@@ -636,7 +679,7 @@ function deletePortfolio(portfolio) {
     if (index === -1) {
         return;
     }
-    if (!confirm('ลบ Portfolio "' + portfolio.displayName + '" ใช่หรือไม่? กู้คืนไม่ได้')) {
+    if (!confirm('ลบ Portfolio "' + (portfolio.displayName || portfolio.title) + '" ใช่หรือไม่? กู้คืนไม่ได้')) {
         return;
     }
     portfolios.splice(index, 1);

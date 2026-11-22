@@ -123,27 +123,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    foreach ($data as $portfolio) {
-    if (!is_array($portfolio) || !validatePortfolio($portfolio)) {
-        http_response_code(400);
-        echo json_encode([
-            'ok' => false,
-            'error' => 'Invalid portfolio data'
-        ]);
-        exit;
-    }
+    foreach ($data as $entry) {
+        if (!is_array($entry)) {
+            http_response_code(400);
+            echo json_encode(['ok' => false, 'error' => 'Invalid entry']);
+            exit;
+        }
 
-    foreach ($portfolio['items'] as $item) {
-        if (!is_array($item) || !validateItem($item)) {
+        $isStandaloneItem = !(isset($entry['items']) && is_array($entry['items']))
+            && isset($entry['title']) && is_string($entry['title']);
+
+        if ($isStandaloneItem) {
+            if (!validateItem($entry)) {
+                http_response_code(400);
+                echo json_encode(['ok' => false, 'error' => 'Invalid item']);
+                exit;
+            }
+            continue;
+        }
+
+        if (!validatePortfolio($entry)) {
             http_response_code(400);
             echo json_encode([
                 'ok' => false,
-                'error' => 'Invalid portfolio item'
+                'error' => 'Invalid portfolio data'
             ]);
             exit;
         }
+
+        foreach ($entry['items'] as $item) {
+            if (!is_array($item) || !validateItem($item)) {
+                http_response_code(400);
+                echo json_encode([
+                    'ok' => false,
+                    'error' => 'Invalid portfolio item'
+                ]);
+                exit;
+            }
+        }
     }
-}
 
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
