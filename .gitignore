@@ -1,0 +1,16 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# User data
+portfolio.json
+
+# Secrets
+.env
+.env.local
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
