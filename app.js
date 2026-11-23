@@ -2,6 +2,7 @@ const form = document.querySelector("#portfolio-form");
 const list = document.querySelector("#portfolio-list");
 const count = document.querySelector("#portfolio-count");
 const select = document.querySelector("#portfolioId");
+const itemSelect = document.querySelector("#itemselect");
 const STORAGE_KEY = 'powerup-portfolio';
 
 let portfolios = [];
@@ -259,6 +260,17 @@ function renderList() {
     count.textContent = portfolios.length;
 }
 
+function renderItemSelect() {
+    itemSelect.innerHTML = '<option value="">-- Select Item --</option>';
+    portfolios.forEach(function (p, i) {
+        if (!isStandaloneItem(p)) return;
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = p.title + (p.type ? " (" + p.type + ")" : "");
+        itemSelect.appendChild(opt);
+    });
+}
+
 function renderSelect() {
     select.innerHTML = '<option value="">-- Select portfolio --</option>';
     portfolios.forEach(function (p, i) {
@@ -268,6 +280,7 @@ function renderSelect() {
         opt.textContent = p.displayName;
         select.appendChild(opt);
     });
+    renderItemSelect();
 }
 
 function validUrl(text) {
@@ -388,8 +401,16 @@ form.addEventListener("submit", function (event) {
     items: []
     };
 
+    const picked = Array.from(itemSelect.selectedOptions)
+        .filter(function (o) { return o.value !== ""; })
+        .map(function (o) { return portfolios[Number(o.value)]; })
+        .filter(isStandaloneItem);
+
+    portfolio.items = picked;
+    portfolios = portfolios.filter(function (p) { return picked.indexOf(p) === -1; });
+
     portfolios.push(portfolio);
-    showPortfolio(portfolio);
+    renderList();
     renderSelect(); 
     savePortfolios();
     form.reset();
@@ -516,6 +537,7 @@ itemForm.addEventListener("submit", function (event){
     }
     savePortfolios();
     renderList();
+    renderItemSelect();
 
     itemForm.reset();
 });
