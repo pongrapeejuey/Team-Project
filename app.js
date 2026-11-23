@@ -495,18 +495,9 @@ itemForm.addEventListener("submit", function (event){
     return;
     }
 
-    errorIndex.textContent = '';
-    errorTitle.textContent = '';
-    errorRole.textContent = '';
-    errorType.textContent = '';
-    errorDate.textContent = '';
-    errorSkills.textContent = ''; 
-    errorDescription.textContent = '';
-    errorWhatIDid.textContent = '';
-    errorWhatILearned.textContent = ''; 
-    errorChallenge.textContent = '';
-    errorNextStep.textContent = '';
-    errorEvidence.textContent = '';
+    itemForm.querySelectorAll("[id^='error-']").forEach(function (el) {
+        el.textContent = "";
+    });
 
    const item = {
     id: nextItemId(),
