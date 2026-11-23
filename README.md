@@ -6,9 +6,8 @@
  
 | รายการ | ข้อมูล |
 |---|---|
-| **Public URL (EC2)** | `http://<EC2-PUBLIC-IP>/`  ← ใส่ IP ล่าสุดก่อนส่ง/วัน Demo |
+| **Public URL (EC2)** | http://52.201.239.253  ← IP ล่าสุดก่อนส่ง/วัน Demo |
 | **Repository** | https://github.com/pongrapeejuey/Team-Project |
-| **Commit SHA ที่ส่งตรวจ** | `<ใส่ SHA เต็มของ commit สุดท้ายก่อนส่ง>` |
 | **Challenge ของกลุ่ม** | เขียนหลังให้คุณงง |
  
 > Public IP ของ EC2 ใน Learner Lab เปลี่ยนได้เมื่อ Stop/Start เครื่อง ตรวจ URL ใหม่ทุกครั้งและแจ้งตามช่องทางที่รายวิชากำหนด
@@ -65,8 +64,8 @@ sudo chmod 750 /var/lib/powerup-data
 ผู้ใช้จึงดาวน์โหลดไฟล์ JSON ตรง ๆ ผ่าน URL ไม่ได้ ต้องผ่าน `echo.php`
  
 ### 4) ตรวจสอบ
-- เปิด `http://<EC2-PUBLIC-IP>/` จาก Browser/เครื่องอื่น ต้องเห็นหน้าเว็บ
-- `http://<EC2-PUBLIC-IP>/portfolio.json` ต้องได้ 404/403 (ห้ามได้ไฟล์ข้อมูล)
+- เปิด http://52.201.239.253 จาก Browser/เครื่องอื่น ต้องเห็นหน้าเว็บ
+- http://52.201.239.253/portfolio.json ได้ 404/403 (ไม่ได้ไฟล์ข้อมูล)
 ### อัปเดตโค้ดหลังแก้ไข
 ```bash
 cd /var/www/html && sudo git pull
@@ -146,20 +145,16 @@ php -S localhost:8000
  
 | การทดสอบ | วิธีทดสอบ | หลักฐาน |
 |---|---|---|
-| Cross-device & Persistence | บันทึกจาก Browser A → เปิดใน Browser B; Restart Apache / Reboot EC2 แล้วข้อมูลยังอยู่ | `<ลิงก์คลิป/Issue>` |
-| Server Validation & File Access | ส่งข้อมูลผิดต้องถูกปฏิเสธ; เปิด `/portfolio.json` ตรง ๆ ต้องไม่ได้ไฟล์ | `<ลิงก์>` |
-| Cross-group Exchange | ทำ Challenge → Copy JSON → Paste/Import → เลือก Portfolio → แก้ Reflection → Save → Refresh | `https://drive.google.com/file/d/1rDbxfXIzYTrlmplaPAiIp3e11sYrYGqx/view?usp=sharing` |
-| Invalid JSON & Duplicate | วาง JSON พัง/Field ผิดชนิด/ID ซ้ำ ต้องแจ้งเตือนและไม่บันทึก | `<ลิงก์>` |
-| Export My Portfolio | ได้ `my-portfolio.json` เฉพาะของตนเอง มี Reflection ครบ 4 ช่อง และ Evidence ≥ 1 URL | `<ลิงก์>` |
-| EC2 & Security Group | แสดงการตั้งค่า Port ที่เปิด | `<ลิงก์>` |
+| Cross-device & Persistence | บันทึกจาก Browser A → เปิดใน Browser B; Restart Apache / Reboot EC2 แล้วข้อมูลยังอยู่ | https://drive.google.com/file/d/1VQPMBjWcvqmACCHObqxc0zVv_-_IWJZd/view?usp=sharing |
+| Server Validation & File Access | ส่งข้อมูลผิดต้องถูกปฏิเสธ; เปิด `/portfolio.json` ตรง ๆ ต้องไม่ได้ไฟล์ | https://drive.google.com/file/d/1CmAwNteAdKCygxL-yR2suHPX8UYzqfoJ/view?usp=sharing |
+| Cross-group Exchange | ทำ Challenge → Copy JSON → Paste/Import → เลือก Portfolio → แก้ Reflection → Save → Refresh | https://drive.google.com/file/d/1rDbxfXIzYTrlmplaPAiIp3e11sYrYGqx/view?usp=sharing |
+| Invalid JSON & Duplicate | วาง JSON พัง/Field ผิดชนิด/ID ซ้ำ ต้องแจ้งเตือนและไม่บันทึก | https://drive.google.com/file/d/1sHuGxRk1Pj7IbCopgxoMKLTh8izxX5FO/view?usp=sharing |
+| EC2 & Security Group | แสดงการตั้งค่า Port ที่เปิด | https://drive.google.com/file/d/1FcYGzn_4KDi130qfmtDVu5XODiQOOZVF/view?usp=sharing |
  
 ผลทดสอบและหลักฐานเพิ่มเติมอยู่ใน GitHub Issues (Checkpoint: [#1](https://github.com/pongrapeejuey/Team-Project/issues/1)–[#4](https://github.com/pongrapeejuey/Team-Project/issues/4))
  
 ---
- 
-## Known Issues
- 
-- `<เติมตามสถานะจริงก่อนส่ง พร้อมลิงก์ Issue>`
+
 ## ทีมและการทำงานร่วมกัน
  
 Workflow: **Issue → Implement → Test → Commit → Close** ทุกงานมีผู้รับผิดชอบ วิธีทดสอบ และหลักฐาน
