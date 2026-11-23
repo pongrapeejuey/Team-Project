@@ -43,6 +43,10 @@
                     <div class="card-body">
                         <form id="portfolio-form" class="form-card" novalidate>
                             <div class="mb-3">
+                                <label for="itemselect" class="form-label">เลือกItem</label>
+                                <select id="itemselect" name="itemselect" class="form-select"></select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="displayName" class="form-label">ชื่อที่ต้องการแสดง <span
                                         class="text-danger">*</span></label>
                                 <input id="displayName" name="displayName" type="text" class="form-control"
@@ -84,10 +88,8 @@
                     <div class="card-body">
                         <form id="item-form" class="form-card" novalidate>
                             <div class="mb-3">
-                                <label for="portfolioId" class="form-label">เพิ่มใน Portfolio <span
-                                        class="text-danger">*</span></label>
+                                <label for="portfolioId" class="form-label">เพิ่มใน Portfolio</label>
                                 <select id="portfolioId" name="portfolioId" class="form-select"></select>
-                                <div class="field-error text-danger small mt-1" id="error-portfolioId"></div>
                             </div>
 
                             <div class="row">
