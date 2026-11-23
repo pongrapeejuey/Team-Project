@@ -9,7 +9,7 @@
 | **Public URL (EC2)** | `http://<EC2-PUBLIC-IP>/`  ← ใส่ IP ล่าสุดก่อนส่ง/วัน Demo |
 | **Repository** | https://github.com/pongrapeejuey/Team-Project |
 | **Commit SHA ที่ส่งตรวจ** | `<ใส่ SHA เต็มของ commit สุดท้ายก่อนส่ง>` |
-| **Challenge ของกลุ่ม** | เขียนหลังให้คุณงง (challengeId: `<G0X-C01>`) |
+| **Challenge ของกลุ่ม** | เขียนหลังให้คุณงง |
  
 > Public IP ของ EC2 ใน Learner Lab เปลี่ยนได้เมื่อ Stop/Start เครื่อง ตรวจ URL ใหม่ทุกครั้งและแจ้งตามช่องทางที่รายวิชากำหนด
  
@@ -110,7 +110,6 @@ php -S localhost:8000
 ### ตัวอย่าง Portfolio Item JSON (ข้อมูลสมมติ)
 ```json
 {
-  "schemaVersion": "1.0",
   "id": "item002",
   "title": "Spot the Request",
   "type": "Challenge",
@@ -125,9 +124,6 @@ php -S localhost:8000
     "nextStep": "Try it on my own app"
   },
   "evidence": ["https://example.com/screenshot-network-tab.png"],
-  "challengeId": "G01-C01",
-  "hostGroup": "G01",
-  "category": "discover"
 }
 ```
  
@@ -152,7 +148,7 @@ php -S localhost:8000
 |---|---|---|
 | Cross-device & Persistence | บันทึกจาก Browser A → เปิดใน Browser B; Restart Apache / Reboot EC2 แล้วข้อมูลยังอยู่ | `<ลิงก์คลิป/Issue>` |
 | Server Validation & File Access | ส่งข้อมูลผิดต้องถูกปฏิเสธ; เปิด `/portfolio.json` ตรง ๆ ต้องไม่ได้ไฟล์ | `<ลิงก์>` |
-| Cross-group Exchange | ทำ Challenge → Copy JSON → Paste/Import → เลือก Portfolio → แก้ Reflection → Save → Refresh | `<ลิงก์>` |
+| Cross-group Exchange | ทำ Challenge → Copy JSON → Paste/Import → เลือก Portfolio → แก้ Reflection → Save → Refresh | `https://drive.google.com/file/d/1rDbxfXIzYTrlmplaPAiIp3e11sYrYGqx/view?usp=sharing` |
 | Invalid JSON & Duplicate | วาง JSON พัง/Field ผิดชนิด/ID ซ้ำ ต้องแจ้งเตือนและไม่บันทึก | `<ลิงก์>` |
 | Export My Portfolio | ได้ `my-portfolio.json` เฉพาะของตนเอง มี Reflection ครบ 4 ช่อง และ Evidence ≥ 1 URL | `<ลิงก์>` |
 | EC2 & Security Group | แสดงการตั้งค่า Port ที่เปิด | `<ลิงก์>` |
